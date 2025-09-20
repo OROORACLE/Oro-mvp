@@ -373,7 +373,7 @@ function HomeContent() {
             alignItems: 'center',
             gap: '30px'
           }}>
-            <a href="#docs" style={{
+            <a href="https://orooracle-m67f4p5jy-loganstafford740-1721s-projects.vercel.app" target="_blank" rel="noopener noreferrer" style={{
               color: '#666',
               textDecoration: 'none',
               fontWeight: '500',
@@ -397,7 +397,7 @@ function HomeContent() {
             }}>
               About
             </a>
-            <button style={{
+            <button onClick={() => document.getElementById('demo-section')?.scrollIntoView({ behavior: 'smooth' })} style={{
               background: 'linear-gradient(45deg, #667eea, #764ba2)',
               color: 'white',
               border: 'none',
@@ -414,7 +414,7 @@ function HomeContent() {
       </header>
 
       {/* Main Content */}
-      <main style={{
+      <main id="demo-section" style={{
         maxWidth: '800px',
         margin: '40px auto',
         padding: '0 20px'
@@ -1087,9 +1087,9 @@ function HomeContent() {
                 display: 'flex',
                 gap: '15px'
               }}>
-                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>Twitter</a>
-                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>Discord</a>
-                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>GitHub</a>
+                <a href="https://x.com/Orooracle" target="_blank" rel="noopener noreferrer" style={{ color: '#ccc', textDecoration: 'none' }}>Twitter</a>
+                <a href="https://discord.gg/oro" target="_blank" rel="noopener noreferrer" style={{ color: '#ccc', textDecoration: 'none' }}>Discord</a>
+                <a href="https://github.com/OROORACLE/oro-mvp" target="_blank" rel="noopener noreferrer" style={{ color: '#ccc', textDecoration: 'none' }}>GitHub</a>
               </div>
             </div>
             
@@ -1106,10 +1106,10 @@ function HomeContent() {
                 flexDirection: 'column',
                 gap: '10px'
               }}>
-                <a href="#api" style={{ color: '#ccc', textDecoration: 'none' }}>API Documentation</a>
-                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>Integration Guide</a>
-                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>Pricing</a>
-                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>Status</a>
+                <a href="https://orooracle-m67f4p5jy-loganstafford740-1721s-projects.vercel.app" target="_blank" rel="noopener noreferrer" style={{ color: '#ccc', textDecoration: 'none' }}>API Documentation</a>
+                <a href="https://github.com/OROORACLE/oro-mvp/blob/main/API.md" target="_blank" rel="noopener noreferrer" style={{ color: '#ccc', textDecoration: 'none' }}>Integration Guide</a>
+                <a href="mailto:ororep23@gmail.com" style={{ color: '#ccc', textDecoration: 'none' }}>Contact for Pricing</a>
+                <a href="https://orooracle-m67f4p5jy-loganstafford740-1721s-projects.vercel.app/health" target="_blank" rel="noopener noreferrer" style={{ color: '#ccc', textDecoration: 'none' }}>API Status</a>
               </div>
             </div>
             
@@ -1127,9 +1127,9 @@ function HomeContent() {
                 gap: '10px'
               }}>
                 <a href="#about" style={{ color: '#ccc', textDecoration: 'none' }}>About Us</a>
-                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>Blog</a>
-                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>Careers</a>
-                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>Contact</a>
+                <a href="https://x.com/Orooracle" target="_blank" rel="noopener noreferrer" style={{ color: '#ccc', textDecoration: 'none' }}>Blog</a>
+                <a href="mailto:ororep23@gmail.com" style={{ color: '#ccc', textDecoration: 'none' }}>Careers</a>
+                <a href="mailto:ororep23@gmail.com" style={{ color: '#ccc', textDecoration: 'none' }}>Contact</a>
               </div>
             </div>
           </div>

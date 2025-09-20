@@ -26,6 +26,25 @@ function getStatus(score) {
 }
 
 // Routes
+app.get('/', (req, res) => {
+  res.json({
+    name: 'ORO API',
+    version: '1.0.0',
+    description: 'Onchain Reputation Oracle API',
+    endpoints: {
+      health: '/health',
+      score: '/score/:address',
+      metadata: '/metadata/:address.json'
+    },
+    examples: {
+      health: `${req.protocol}://${req.get('host')}/health`,
+      score: `${req.protocol}://${req.get('host')}/score/0x1234567890123456789012345678901234567890`,
+      metadata: `${req.protocol}://${req.get('host')}/metadata/0x1234567890123456789012345678901234567890.json`
+    },
+    documentation: 'https://github.com/OROORACLE/oro-mvp/blob/main/API.md'
+  });
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
