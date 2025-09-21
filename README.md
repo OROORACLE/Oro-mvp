@@ -60,12 +60,12 @@ curl "https://orooracle-mqenn88nd-loganstafford740-1721s-projects.vercel.app/met
 **Response:**
 ```json
 {
-  "name": "ORO Badge - Good Standing",
+  "name": "ORO Badge - Stable",
   "description": "Reputation badge for 0x1234567890123456789012345678901234567890. Score: 56/100",
   "image": "https://via.placeholder.com/512x512/000000/ffffff?text=ORO+56",
   "attributes": [
     { "trait_type": "Score", "value": 56 },
-    { "trait_type": "Status", "value": "Good Standing" }
+    { "trait_type": "Status", "value": "Stable" }
   ]
 }
 ```
@@ -82,8 +82,8 @@ curl "https://orooracle-mqenn88nd-loganstafford740-1721s-projects.vercel.app/met
 
 | Score Range | Status | Description |
 |-------------|--------|-------------|
-| 80-100 | Never Defaulted | Highest reputation tier |
-| 50-79 | Good Standing | Standard reputation tier |
+| 80-100 | Trusted | Highest reputation tier |
+| 50-79 | Stable | Standard reputation tier |
 | 0-49 | New/Unproven | Basic reputation tier |
 
 ---

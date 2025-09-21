@@ -275,12 +275,12 @@ export default function Docs() {
                 <tbody>
                   <tr style={{ borderBottom: '1px solid #e9ecef' }}>
                     <td style={{ padding: '15px', fontWeight: 'bold', color: '#333' }}>80-100</td>
-                    <td style={{ padding: '15px', color: '#28a745' }}>Never Defaulted</td>
+                    <td style={{ padding: '15px', color: '#28a745' }}>Trusted</td>
                     <td style={{ padding: '15px', color: '#666' }}>Highest reputation tier with excellent onchain behavior</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #e9ecef' }}>
                     <td style={{ padding: '15px', fontWeight: 'bold', color: '#333' }}>50-79</td>
-                    <td style={{ padding: '15px', color: '#ffc107' }}>Good Standing</td>
+                    <td style={{ padding: '15px', color: '#ffc107' }}>Stable</td>
                     <td style={{ padding: '15px', color: '#666' }}>Standard reputation tier with reliable behavior</td>
                   </tr>
                   <tr>
@@ -359,7 +359,7 @@ export default function Docs() {
                 borderRadius: '5px',
                 color: '#333'
               }}>
-                https://orooracle-i3osvo3xn-loganstafford740-1721s-projects.vercel.app
+                https://orooracle-jy1luige9-loganstafford740-1721s-projects.vercel.app
               </code>
             </div>
 
@@ -430,7 +430,7 @@ export default function Docs() {
                 overflow: 'auto',
                 fontSize: '14px'
               }}>
-{`const API_BASE = 'https://orooracle-i3osvo3xn-loganstafford740-1721s-projects.vercel.app';
+{`const API_BASE = 'https://orooracle-jy1luige9-loganstafford740-1721s-projects.vercel.app';
 
 async function getWalletScore(address) {
   const response = await fetch(\`\${API_BASE}/score/\${address}\`);

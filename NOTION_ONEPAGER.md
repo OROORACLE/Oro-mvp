@@ -62,7 +62,7 @@ curl "https://orooracle-mqenn88nd-loganstafford740-1721s-projects.vercel.app/sco
 {
   "address": "0x1234...",
   "score": 85,
-  "status": "Never Defaulted",
+  "status": "Trusted",
   "updatedAt": "2025-01-20T10:30:00Z"
 }
 ```
@@ -75,12 +75,12 @@ curl "https://orooracle-mqenn88nd-loganstafford740-1721s-projects.vercel.app/met
 **Response:**
 ```json
 {
-  "name": "ORO Badge - Never Defaulted",
+  "name": "ORO Badge - Trusted",
   "description": "Reputation badge for 0x1234... Score: 85/100",
   "image": "https://...",
   "attributes": [
     { "trait_type": "Score", "value": 85 },
-    { "trait_type": "Status", "value": "Never Defaulted" }
+    { "trait_type": "Status", "value": "Trusted" }
   ]
 }
 ```
@@ -91,8 +91,8 @@ curl "https://orooracle-mqenn88nd-loganstafford740-1721s-projects.vercel.app/met
 
 | Score | Status | Description |
 |-------|--------|-------------|
-| 80-100 | Never Defaulted | Highest reputation tier |
-| 50-79 | Good Standing | Standard reputation tier |
+| 80-100 | Trusted | Highest reputation tier |
+| 50-79 | Stable | Standard reputation tier |
 | 0-49 | New/Unproven | Basic reputation tier |
 
 ---

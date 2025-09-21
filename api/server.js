@@ -181,8 +181,8 @@ function calculateTokenScore(tokenTransfers) {
 }
 
 function getStatus(score) {
-  if (score >= 80) return "Never Defaulted";
-  if (score >= 50) return "Good Standing";
+  if (score >= 80) return "Trusted";
+  if (score >= 50) return "Stable";
   return "New/Unproven";
 }
 
@@ -215,8 +215,8 @@ app.get('/badges', (req, res) => {
   const githubBaseUrl = 'https://raw.githubusercontent.com/OROORACLE/oro-mvp/master/images/badges';
   res.json({
     badges: [
-      `${githubBaseUrl}/never-defaulted.png`,
-      `${githubBaseUrl}/good-standing.png`, 
+      `${githubBaseUrl}/trusted.png`,
+      `${githubBaseUrl}/stable.png`,
       `${githubBaseUrl}/new-unproven.png`
     ],
     baseUrl: githubBaseUrl
@@ -262,10 +262,10 @@ app.get('/metadata/:address.json', async (req, res) => {
   
   // Use custom NFT badge images from GitHub raw URLs
   const githubBaseUrl = 'https://raw.githubusercontent.com/OROORACLE/oro-mvp/master/images/badges';
-  if (status === "Never Defaulted") {
-    badgeImage = `${githubBaseUrl}/never-defaulted.png`;
-  } else if (status === "Good Standing") {
-    badgeImage = `${githubBaseUrl}/good-standing.png`;
+  if (status === "Trusted") {
+    badgeImage = `${githubBaseUrl}/trusted.png`;
+  } else if (status === "Stable") {
+    badgeImage = `${githubBaseUrl}/stable.png`;
   } else {
     badgeImage = `${githubBaseUrl}/new-unproven.png`;
   }

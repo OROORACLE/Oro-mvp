@@ -38,6 +38,8 @@ function WalletSection() {
       });
     } catch (error) {
       console.error('Mint failed:', error);
+      // Show user-friendly error message
+      alert(`Minting failed: ${error.message || 'Unknown error. You may not be authorized to mint badges yet.'}`);
     }
   };
 
@@ -105,6 +107,19 @@ function WalletSection() {
           </div>
           
           <div style={{ textAlign: 'center' }}>
+            <div style={{
+              background: '#fff3cd',
+              border: '1px solid #ffeaa7',
+              borderRadius: '8px',
+              padding: '10px',
+              marginBottom: '15px',
+              fontSize: '14px',
+              color: '#856404'
+            }}>
+              ⚠️ <strong>Testnet Only:</strong> Badge minting is currently limited to authorized testers. 
+              This is a demo on Sepolia testnet.
+            </div>
+            
             <button
               onClick={handleMint}
               disabled={isPending || isConfirming}
@@ -121,7 +136,7 @@ function WalletSection() {
                 transition: 'all 0.3s ease'
               }}
             >
-              {isPending ? 'Confirming...' : isConfirming ? 'Minting...' : 'Mint/Update Badge'}
+              {isPending ? 'Confirming...' : isConfirming ? 'Minting...' : 'Mint/Update Badge (Testnet)'}
             </button>
             
             <button
@@ -188,7 +203,7 @@ function HomeContent() {
   const [error, setError] = useState('');
   const { address: connectedAddress } = useAccount();
 
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://orooracle-i3osvo3xn-loganstafford740-1721s-projects.vercel.app';
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://orooracle-7oczt1f77-loganstafford740-1721s-projects.vercel.app';
 
   // Auto-populate address when wallet connects
   useEffect(() => {
@@ -272,7 +287,7 @@ function HomeContent() {
     // Ensure score is between 0-100
     score = Math.max(0, Math.min(100, score));
     
-    const status = score >= 80 ? "Never Defaulted" : score >= 50 ? "Good Standing" : "New/Unproven";
+    const status = score >= 80 ? "Trusted" : score >= 50 ? "Stable" : "New/Unproven";
     
     return {
       address: addr.toLowerCase(),
@@ -286,10 +301,21 @@ function HomeContent() {
     const status = scoreData.status;
     const score = scoreData.score;
     
+  // Use real badge images based on status
+  let badgeImage;
+  const githubBaseUrl = 'https://raw.githubusercontent.com/OROORACLE/oro-mvp/master/images/badges';
+  if (status === "Trusted") {
+    badgeImage = `${githubBaseUrl}/trusted.png`;
+  } else if (status === "Stable") {
+    badgeImage = `${githubBaseUrl}/stable.png`;
+  } else {
+    badgeImage = `${githubBaseUrl}/new-unproven.png`;
+  }
+    
     return {
       name: `ORO Badge - ${status}`,
       description: `Reputation badge for ${addr}. This wallet has a reputation score of ${score}/100 based on onchain behavior analysis.`,
-      image: `https://via.placeholder.com/512x512/667eea/ffffff?text=ORO+${score}`,
+      image: badgeImage,
       attributes: [
         { trait_type: "Score", value: score },
         { trait_type: "Status", value: status },
@@ -747,6 +773,24 @@ function HomeContent() {
           }}>
             A transparent onchain reputation system for Web3
           </p>
+          
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            borderRadius: '10px',
+            padding: '15px',
+            marginBottom: '40px',
+            maxWidth: '500px',
+            margin: '0 auto 40px',
+            textAlign: 'center'
+          }}>
+            <div style={{ color: 'white', fontSize: '14px', marginBottom: '5px' }}>
+              🚧 <strong>MVP Status:</strong> Currently in testing phase
+            </div>
+            <div style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '12px' }}>
+              Badge minting limited to authorized testers • Sepolia testnet only
+            </div>
+          </div>
           
           <div style={{
             display: 'grid',
