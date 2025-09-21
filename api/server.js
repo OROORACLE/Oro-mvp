@@ -204,14 +204,14 @@ app.get('/health', (req, res) => {
 
 // Test endpoint to list available badges
 app.get('/badges', (req, res) => {
-  const baseUrl = req.protocol + '://' + req.get('host');
+  const githubBaseUrl = 'https://raw.githubusercontent.com/OROORACLE/oro-mvp/main/images/badges';
   res.json({
     badges: [
-      `${baseUrl}/badges/never-defaulted.png`,
-      `${baseUrl}/badges/good-standing.png`, 
-      `${baseUrl}/badges/new-unproven.png`
+      `${githubBaseUrl}/never-defaulted.png`,
+      `${githubBaseUrl}/good-standing.png`, 
+      `${githubBaseUrl}/new-unproven.png`
     ],
-    baseUrl: baseUrl
+    baseUrl: githubBaseUrl
   });
 });
 
@@ -252,14 +252,14 @@ app.get('/metadata/:address.json', async (req, res) => {
   // Determine badge image based on status
   let badgeImage;
   
-  // Use custom NFT badge images
-  const baseUrl = req.protocol + '://' + req.get('host');
+  // Use custom NFT badge images from GitHub raw URLs
+  const githubBaseUrl = 'https://raw.githubusercontent.com/OROORACLE/oro-mvp/main/images/badges';
   if (status === "Never Defaulted") {
-    badgeImage = `${baseUrl}/badges/never-defaulted.png`;
+    badgeImage = `${githubBaseUrl}/never-defaulted.png`;
   } else if (status === "Good Standing") {
-    badgeImage = `${baseUrl}/badges/good-standing.png`;
+    badgeImage = `${githubBaseUrl}/good-standing.png`;
   } else {
-    badgeImage = `${baseUrl}/badges/new-unproven.png`;
+    badgeImage = `${githubBaseUrl}/new-unproven.png`;
   }
 
   const metadata = {

@@ -359,7 +359,7 @@ export default function Docs() {
                 borderRadius: '5px',
                 color: '#333'
               }}>
-                https://orooracle-m67f4p5jy-loganstafford740-1721s-projects.vercel.app
+                https://orooracle-i3osvo3xn-loganstafford740-1721s-projects.vercel.app
               </code>
             </div>
 
@@ -430,7 +430,7 @@ export default function Docs() {
                 overflow: 'auto',
                 fontSize: '14px'
               }}>
-{`const API_BASE = 'https://orooracle-m67f4p5jy-loganstafford740-1721s-projects.vercel.app';
+{`const API_BASE = 'https://orooracle-i3osvo3xn-loganstafford740-1721s-projects.vercel.app';
 
 async function getWalletScore(address) {
   const response = await fetch(\`\${API_BASE}/score/\${address}\`);
