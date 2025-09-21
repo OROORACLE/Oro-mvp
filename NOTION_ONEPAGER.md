@@ -29,9 +29,14 @@ ORO is building the infrastructure for Web3 reputation. We analyze onchain behav
 ## 📊 How It Works
 
 ### 1. Score Generation
-- Analyzes onchain behavior patterns
-- Generates reputation score (0-100)
-- Updates in real-time as behavior changes
+- **Real onchain analysis** of wallet behavior patterns
+- **Weighted scoring algorithm** (0-100) based on:
+  - Wallet Age (20%) - Time since first transaction
+  - ETH Balance (25%) - Current balance with diminishing returns
+  - Transaction Activity (20%) - Frequency and patterns
+  - DeFi Usage (25%) - Protocol interactions
+  - Token Diversity (10%) - Portfolio variety
+- **Updates in real-time** as behavior changes
 
 ### 2. Badge Minting
 - Soulbound ERC-721 tokens (non-transferable)

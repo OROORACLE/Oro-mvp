@@ -2,8 +2,35 @@
 
 ## Base URL
 ```
-https://orooracle-mqenn88nd-loganstafford740-1721s-projects.vercel.app
+https://orooracle-b5o1t3ixe-loganstafford740-1721s-projects.vercel.app
 ```
+
+## 🧠 Scoring Algorithm
+
+ORO uses real onchain data analysis to generate reputation scores (0-100):
+
+| Factor | Weight | Description |
+|--------|--------|-------------|
+| **Wallet Age** | 20% | Time since first transaction (older = better) |
+| **ETH Balance** | 25% | Current balance with diminishing returns |
+| **Transaction Activity** | 20% | Transaction count and patterns |
+| **DeFi Usage** | 25% | Protocol interactions (Uniswap, Aave, Compound, etc.) |
+| **Token Diversity** | 10% | Number of different tokens held |
+
+**Data Source:** Ethereum Mainnet via Alchemy API
+
+### Supported DeFi Protocols
+- **Uniswap V2/V3** - DEX trading
+- **Aave** - Lending/borrowing
+- **Compound** - Lending protocols
+- **1inch** - DEX aggregator
+- **Metamask Swap** - Built-in swapping
+
+### Technical Details
+- **API Response Time:** ~2-3 seconds for full analysis
+- **Data Freshness:** Real-time (latest block)
+- **Fallback:** Deterministic scoring if API unavailable
+- **Rate Limits:** No current limits (use responsibly)
 
 ## Endpoints
 

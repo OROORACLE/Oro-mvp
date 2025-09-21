@@ -14,10 +14,24 @@ It scores wallets based on onchain behavior and makes that reputation portable a
 ---
 
 ## What It Does
-- Dynamic reputation score (0–100) for any wallet  
-- Soulbound badges that update in real time  
-- Simple API for protocol integrations  
-- Helps DeFi protocols reduce risk, reward trusted users, and gate features more intelligently  
+- **Real onchain reputation scoring** (0–100) based on actual wallet behavior
+- **Soulbound badges** that update in real time  
+- **Simple API** for protocol integrations  
+- **Helps DeFi protocols** reduce risk, reward trusted users, and gate features more intelligently
+
+## 🧠 Scoring Algorithm
+
+ORO analyzes real onchain data to generate reputation scores:
+
+| Factor | Weight | Description |
+|--------|--------|-------------|
+| **Wallet Age** | 20% | How long the wallet has been active (first transaction date) |
+| **ETH Balance** | 25% | Current ETH balance with diminishing returns |
+| **Transaction Activity** | 20% | Transaction frequency and volume patterns |
+| **DeFi Usage** | 25% | Interactions with major DeFi protocols (Uniswap, Aave, Compound, etc.) |
+| **Token Diversity** | 10% | Number of different tokens held |
+
+**Data Sources:** Ethereum Mainnet via Alchemy API  
 
 ---
 
