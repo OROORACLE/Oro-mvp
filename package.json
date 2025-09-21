@@ -4,10 +4,10 @@
   "description": "ORO — Onchain Reputation Oracle for Web3",
   "private": true,
   "scripts": {
-    "dev": "npm run dev --workspace=web",
-    "build": "npm run build --workspace=web",
-    "lint": "npm run lint --workspace=web",
-    "test": "npm run test --workspace=web"
+    "dev": "cd web && npm run dev",
+    "build": "cd web && npm run build",
+    "lint": "cd web && npm run lint",
+    "test": "cd web && npm run test"
   },
   "keywords": [
     "web3",
