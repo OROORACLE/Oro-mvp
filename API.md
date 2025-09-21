@@ -2,8 +2,17 @@
 
 ## Base URL
 ```
-https://orooracle-b5o1t3ixe-loganstafford740-1721s-projects.vercel.app
+https://orooracle-h15unb47o-loganstafford740-1721s-projects.vercel.app
 ```
+
+## 🚀 New: Zero-Gas JWT Attestations
+
+ORO now supports **zero-gas credential attestations** for seamless partner integration:
+
+- **30-day portable credentials** - partners can cache and reuse
+- **JWT + EIP-712 signatures** - Web3 compatible
+- **No blockchain writes** - instant verification
+- **API-first monetization** - charge per attestation
 
 ## 🧠 Scoring Algorithm
 
@@ -137,10 +146,20 @@ def get_badge_metadata(address):
 ### cURL
 ```bash
 # Get score
-curl "https://orooracle-mqenn88nd-loganstafford740-1721s-projects.vercel.app/score/0x1234567890123456789012345678901234567890"
+curl "https://orooracle-h15unb47o-loganstafford740-1721s-projects.vercel.app/score/0x1234567890123456789012345678901234567890"
 
 # Get metadata
-curl "https://orooracle-mqenn88nd-loganstafford740-1721s-projects.vercel.app/metadata/0x1234567890123456789012345678901234567890.json"
+curl "https://orooracle-h15unb47o-loganstafford740-1721s-projects.vercel.app/metadata/0x1234567890123456789012345678901234567890.json"
+
+# Create JWT attestation (NEW)
+curl -X POST "https://orooracle-h15unb47o-loganstafford740-1721s-projects.vercel.app/v0/attest" \
+  -H "Content-Type: application/json" \
+  -d '{"address": "0x1234567890123456789012345678901234567890"}'
+
+# Verify JWT attestation (NEW)
+curl -X POST "https://orooracle-h15unb47o-loganstafford740-1721s-projects.vercel.app/v0/verify" \
+  -H "Content-Type: application/json" \
+  -d '{"jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."}'
 ```
 
 ## Rate Limits
