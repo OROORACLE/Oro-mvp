@@ -204,6 +204,7 @@ function HomeContent() {
   const { address: connectedAddress } = useAccount();
 
   // Updated to use new API with performance monitoring and 30-day JWT
+  // Triggering deployment with root directory fix
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://orooracle-f1cbfeyda-loganstafford740-1721s-projects.vercel.app';
 
   // Auto-populate address when wallet connects
