@@ -203,7 +203,7 @@ function HomeContent() {
   const [error, setError] = useState('');
   const { address: connectedAddress } = useAccount();
 
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://orooracle-7oczt1f77-loganstafford740-1721s-projects.vercel.app';
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://orooracle-124h3ry3f-loganstafford740-1721s-projects.vercel.app';
 
   // Auto-populate address when wallet connects
   useEffect(() => {
