@@ -203,7 +203,7 @@ function HomeContent() {
   const [error, setError] = useState('');
   const { address: connectedAddress } = useAccount();
 
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://orooracle-124h3ry3f-loganstafford740-1721s-projects.vercel.app';
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://orooracle-rha6jp2ag-loganstafford740-1721s-projects.vercel.app';
 
   // Auto-populate address when wallet connects
   useEffect(() => {
@@ -304,12 +304,13 @@ function HomeContent() {
   // Use real badge images based on status
   let badgeImage;
   const githubBaseUrl = 'https://raw.githubusercontent.com/OROORACLE/oro-mvp/master/images/badges';
+  const cacheBuster = Date.now(); // Force cache refresh
   if (status === "Trusted") {
-    badgeImage = `${githubBaseUrl}/trusted.png`;
+    badgeImage = `${githubBaseUrl}/trusted.png?v=${cacheBuster}`;
   } else if (status === "Stable") {
-    badgeImage = `${githubBaseUrl}/stable.png`;
+    badgeImage = `${githubBaseUrl}/stable.png?v=${cacheBuster}`;
   } else {
-    badgeImage = `${githubBaseUrl}/new-unproven.png`;
+    badgeImage = `${githubBaseUrl}/new-unproven.png?v=${cacheBuster}`;
   }
     
     return {

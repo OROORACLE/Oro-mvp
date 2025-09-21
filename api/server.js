@@ -262,12 +262,13 @@ app.get('/metadata/:address.json', async (req, res) => {
   
   // Use custom NFT badge images from GitHub raw URLs
   const githubBaseUrl = 'https://raw.githubusercontent.com/OROORACLE/oro-mvp/master/images/badges';
+  const cacheBuster = Date.now(); // Force cache refresh
   if (status === "Trusted") {
-    badgeImage = `${githubBaseUrl}/trusted.png`;
+    badgeImage = `${githubBaseUrl}/never-defaulted.png?v=${cacheBuster}`;
   } else if (status === "Stable") {
-    badgeImage = `${githubBaseUrl}/stable.png`;
+    badgeImage = `${githubBaseUrl}/good-standing.png?v=${cacheBuster}`;
   } else {
-    badgeImage = `${githubBaseUrl}/new-unproven.png`;
+    badgeImage = `${githubBaseUrl}/new-unproven.png?v=${cacheBuster}`;
   }
 
   const metadata = {
