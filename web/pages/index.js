@@ -745,7 +745,7 @@ function HomeContent() {
             maxWidth: '600px',
             margin: '0 auto 60px'
           }}>
-            The most comprehensive onchain reputation system for Web3
+            A transparent onchain reputation system for Web3
           </p>
           
           <div style={{
@@ -827,7 +827,7 @@ function HomeContent() {
                 color: '#666',
                 lineHeight: '1.6'
               }}>
-                Reputation follows users across all DeFi protocols, creating a unified Web3 identity system.
+                Protocols can integrate ORO's API to access reputation data for their users.
               </p>
             </div>
           </div>
@@ -981,7 +981,7 @@ function HomeContent() {
                 Data-Driven
               </h3>
               <p style={{ opacity: 0.8 }}>
-                Our scoring algorithm analyzes thousands of onchain data points to create accurate reputation profiles.
+                Our scoring algorithm analyzes key onchain behavior patterns to create accurate reputation profiles.
               </p>
             </div>
             

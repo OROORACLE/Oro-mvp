@@ -9,8 +9,8 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from badges directory
-app.use('/badges', express.static('badges'));
+// Serve static files from public directory
+app.use('/badges', express.static('public/badges'));
 
 // Initialize Alchemy SDK
 const alchemy = new Alchemy({
@@ -204,13 +204,14 @@ app.get('/health', (req, res) => {
 
 // Test endpoint to list available badges
 app.get('/badges', (req, res) => {
+  const baseUrl = req.protocol + '://' + req.get('host');
   res.json({
     badges: [
-      '/badges/never-defaulted.png',
-      '/badges/good-standing.png', 
-      '/badges/new-unproven.png'
+      `${baseUrl}/badges/never-defaulted.png`,
+      `${baseUrl}/badges/good-standing.png`, 
+      `${baseUrl}/badges/new-unproven.png`
     ],
-    baseUrl: req.protocol + '://' + req.get('host')
+    baseUrl: baseUrl
   });
 });
 
@@ -251,13 +252,14 @@ app.get('/metadata/:address.json', async (req, res) => {
   // Determine badge image based on status
   let badgeImage;
   
-  // Use custom NFT badge images - temporarily using placeholders until images are properly hosted
+  // Use custom NFT badge images
+  const baseUrl = req.protocol + '://' + req.get('host');
   if (status === "Never Defaulted") {
-    badgeImage = "https://via.placeholder.com/512x512/00ff00/ffffff?text=NEVER+DEFAULTED";
+    badgeImage = `${baseUrl}/badges/never-defaulted.png`;
   } else if (status === "Good Standing") {
-    badgeImage = "https://via.placeholder.com/512x512/0066cc/ffffff?text=GOOD+STANDING";
+    badgeImage = `${baseUrl}/badges/good-standing.png`;
   } else {
-    badgeImage = "https://via.placeholder.com/512x512/666666/ffffff?text=NEW+UNPROVEN";
+    badgeImage = `${baseUrl}/badges/new-unproven.png`;
   }
 
   const metadata = {

@@ -93,6 +93,7 @@ export default function Docs() {
             <ul style={{ color: '#666', lineHeight: '1.8' }}>
               <li><a href="#overview" style={{ color: '#667eea', textDecoration: 'none' }}>What is ORO?</a></li>
               <li><a href="#how-it-works" style={{ color: '#667eea', textDecoration: 'none' }}>How It Works</a></li>
+              <li><a href="#scoring-algorithm" style={{ color: '#667eea', textDecoration: 'none' }}>Scoring Algorithm</a></li>
               <li><a href="#reputation-tiers" style={{ color: '#667eea', textDecoration: 'none' }}>Reputation Tiers</a></li>
               <li><a href="#use-cases" style={{ color: '#667eea', textDecoration: 'none' }}>Use Cases</a></li>
               <li><a href="#api-reference" style={{ color: '#667eea', textDecoration: 'none' }}>API Reference</a></li>
@@ -106,7 +107,7 @@ export default function Docs() {
             <h2 style={{ color: '#333', marginBottom: '20px' }}>What is ORO?</h2>
             <p style={{ color: '#666', lineHeight: '1.6', marginBottom: '15px' }}>
               ORO (Onchain Reputation Oracle) is building the infrastructure for Web3 reputation. 
-              We analyze onchain behavior patterns to create portable reputation scores that help 
+              We analyze key onchain behavior patterns to create portable reputation scores that help 
               DeFi protocols make better risk decisions and reward trusted users.
             </p>
             <p style={{ color: '#666', lineHeight: '1.6', marginBottom: '15px' }}>
@@ -132,8 +133,8 @@ export default function Docs() {
               }}>
                 <h3 style={{ color: '#333', marginBottom: '10px' }}>1. Data Analysis</h3>
                 <p style={{ color: '#666', lineHeight: '1.6' }}>
-                  We analyze thousands of onchain data points including transaction history, 
-                  DeFi interactions, and protocol usage patterns.
+                  We analyze real onchain data from Ethereum Mainnet including wallet age, ETH balance, 
+                  transaction activity, DeFi interactions, and token holdings.
                 </p>
               </div>
               <div style={{
@@ -144,8 +145,8 @@ export default function Docs() {
               }}>
                 <h3 style={{ color: '#333', marginBottom: '10px' }}>2. Score Generation</h3>
                 <p style={{ color: '#666', lineHeight: '1.6' }}>
-                  Our algorithm generates a reputation score (0-100) based on risk patterns, 
-                  reliability, and onchain behavior consistency.
+                  Our weighted algorithm generates a reputation score (0-100) based on wallet age, 
+                  balance, activity, DeFi usage, and token diversity.
                 </p>
               </div>
               <div style={{
@@ -160,6 +161,95 @@ export default function Docs() {
                   and are non-transferable, ensuring authenticity.
                 </p>
               </div>
+            </div>
+          </section>
+
+          {/* Scoring Algorithm */}
+          <section id="scoring-algorithm" style={{ marginBottom: '40px' }}>
+            <h2 style={{ color: '#333', marginBottom: '20px' }}>Scoring Algorithm</h2>
+            <p style={{ color: '#666', lineHeight: '1.6', marginBottom: '20px' }}>
+              ORO uses a weighted algorithm that analyzes real onchain data to generate 
+              reputation scores. Our MVP system evaluates five key factors to create a 
+              comprehensive assessment of wallet behavior and reliability.
+            </p>
+            
+            <div style={{
+              background: '#f8f9fa',
+              padding: '20px',
+              borderRadius: '10px',
+              marginBottom: '20px'
+            }}>
+              <h4 style={{ color: '#333', marginBottom: '15px' }}>Algorithm Factors</h4>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{
+                  width: '100%',
+                  borderCollapse: 'collapse',
+                  background: 'white',
+                  borderRadius: '8px',
+                  overflow: 'hidden'
+                }}>
+                  <thead>
+                    <tr style={{ background: '#667eea', color: 'white' }}>
+                      <th style={{ padding: '12px', textAlign: 'left' }}>Factor</th>
+                      <th style={{ padding: '12px', textAlign: 'left' }}>Weight</th>
+                      <th style={{ padding: '12px', textAlign: 'left' }}>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style={{ borderBottom: '1px solid #e9ecef' }}>
+                      <td style={{ padding: '12px', fontWeight: 'bold', color: '#333' }}>Wallet Age</td>
+                      <td style={{ padding: '12px', color: '#333' }}>20%</td>
+                      <td style={{ padding: '12px', color: '#666' }}>Time since first transaction (older = more established)</td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid #e9ecef' }}>
+                      <td style={{ padding: '12px', fontWeight: 'bold', color: '#333' }}>ETH Balance</td>
+                      <td style={{ padding: '12px', color: '#333' }}>25%</td>
+                      <td style={{ padding: '12px', color: '#666' }}>Current balance with diminishing returns for high amounts</td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid #e9ecef' }}>
+                      <td style={{ padding: '12px', fontWeight: 'bold', color: '#333' }}>Transaction Activity</td>
+                      <td style={{ padding: '12px', color: '#333' }}>20%</td>
+                      <td style={{ padding: '12px', color: '#666' }}>Transaction frequency and volume patterns</td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid #e9ecef' }}>
+                      <td style={{ padding: '12px', fontWeight: 'bold', color: '#333' }}>DeFi Usage</td>
+                      <td style={{ padding: '12px', color: '#333' }}>25%</td>
+                      <td style={{ padding: '12px', color: '#666' }}>Interactions with major DeFi protocols (Uniswap, Aave, etc.)</td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: '12px', fontWeight: 'bold', color: '#333' }}>Token Diversity</td>
+                      <td style={{ padding: '12px', color: '#333' }}>10%</td>
+                      <td style={{ padding: '12px', color: '#666' }}>Number of different tokens held in wallet</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div style={{
+              background: '#e8f5e8',
+              padding: '20px',
+              borderRadius: '10px',
+              border: '1px solid #c3e6c3'
+            }}>
+              <h4 style={{ color: '#2d5a2d', marginBottom: '10px' }}>🔍 Data Sources</h4>
+              <p style={{ color: '#2d5a2d', margin: '0', fontSize: '14px' }}>
+                <strong>Ethereum Mainnet</strong> via Alchemy API • Real-time analysis • 
+                No personal data collected • Fully transparent and verifiable
+              </p>
+            </div>
+
+            <div style={{
+              background: '#fff3cd',
+              padding: '15px',
+              borderRadius: '8px',
+              border: '1px solid #ffeaa7',
+              marginTop: '15px'
+            }}>
+              <p style={{ color: '#856404', margin: '0', fontSize: '14px' }}>
+                <strong>Note:</strong> This is our MVP version. We're continuously improving the algorithm 
+                and adding more sophisticated analysis as we gather feedback and data.
+              </p>
             </div>
           </section>
 
