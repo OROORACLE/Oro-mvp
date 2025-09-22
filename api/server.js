@@ -17,6 +17,7 @@ app.use(cors({
   origin: [
     'https://web-eqaphg4cx-loganstafford740-1721s-projects.vercel.app',
     'https://web-ashen-two.vercel.app',
+    'https://web-c5yfoj80j-loganstafford740-1721s-projects.vercel.app',
     'http://localhost:3000',
     'http://localhost:3001'
   ],
@@ -30,6 +31,14 @@ app.use((req, res, next) => {
   res.on('finish', () => {
     const duration = Date.now() - start;
     console.log(`${req.method} ${req.path} - ${res.statusCode} - ${duration}ms`);
+    
+    // Log performance metrics for Vercel to track
+    if (duration > 1000) {
+      console.warn(`SLOW_REQUEST: ${req.method} ${req.path} took ${duration}ms`);
+    }
+    if (duration > 5000) {
+      console.error(`TIMEOUT_RISK: ${req.method} ${req.path} took ${duration}ms`);
+    }
   });
   next();
 });
@@ -39,8 +48,10 @@ app.use('/badges', express.static('public/badges'));
 
 // Initialize Alchemy SDK
 const alchemy = new Alchemy({
-  apiKey: process.env.ALCHEMY_API_KEY || 'demo', // Use demo key for now
+  apiKey: process.env.ALCHEMY_API_KEY || 'eqHZ7IU0G8noXjF-OLo6U', // Real Alchemy key
   network: Network.ETH_MAINNET,
+  maxRetries: 3,
+  requestTimeout: 30000, // 30 second timeout instead of 120
 });
 
 // Helper functions
@@ -53,46 +64,75 @@ async function calculateScore(address) {
   try {
     console.log(`Analyzing wallet: ${address}`);
     
-    // Get wallet data from Alchemy
-    const [balance, transactions, tokenTransfers] = await Promise.all([
-      alchemy.core.getBalance(address),
-      alchemy.core.getAssetTransfers({
-        fromAddress: address,
-        category: ['external', 'internal', 'erc20', 'erc721', 'erc1155'],
-        maxCount: 1000
-      }),
-      alchemy.core.getTokenBalances(address)
-    ]);
-
-    // Calculate individual factors
-    const walletAge = await calculateWalletAge(address, transactions);
-    const balanceScore = calculateBalanceScore(balance);
-    const activityScore = calculateActivityScore(transactions);
-    const defiScore = calculateDeFiScore(transactions);
-    const tokenScore = calculateTokenScore(tokenTransfers);
-
-    // Weighted scoring (total: 100 points)
-    const totalScore = Math.min(100, Math.max(0,
-      (walletAge * 0.20) +      // 20 points max
-      (balanceScore * 0.25) +   // 25 points max  
-      (activityScore * 0.20) +  // 20 points max
-      (defiScore * 0.25) +      // 25 points max
-      (tokenScore * 0.10)       // 10 points max
-    ));
-
-    console.log(`Score breakdown for ${address}:`, {
-      walletAge: walletAge,
-      balanceScore: balanceScore,
-      activityScore: activityScore,
-      defiScore: defiScore,
-      tokenScore: tokenScore,
-      totalScore: Math.round(totalScore)
+    // Set a timeout for the entire scoring process
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Scoring timeout')), 15000); // 15 second timeout
     });
+    
+    const scoringPromise = (async () => {
+      // Get wallet data from Alchemy
+      const [balance, transactions, tokenTransfers] = await Promise.all([
+        alchemy.core.getBalance(address),
+        alchemy.core.getAssetTransfers({
+          fromAddress: address,
+          category: ['external', 'internal', 'erc20', 'erc721', 'erc1155'],
+          maxCount: 1000
+        }),
+        alchemy.core.getTokenBalances(address)
+      ]);
 
-    return Math.round(totalScore);
+      // Calculate individual factors
+      const walletAge = await calculateWalletAge(address, transactions);
+      const balanceScore = calculateBalanceScore(balance);
+      const activityScore = calculateActivityScore(transactions);
+      const defiScore = calculateDeFiScore(transactions);
+      const tokenScore = calculateTokenScore(tokenTransfers);
+
+      // Weighted scoring (total: 100 points)
+      const totalScore = Math.min(100, Math.max(0,
+        (walletAge * 0.20) +      // 20% weight
+        (balanceScore * 0.25) +   // 25% weight  
+        (activityScore * 0.20) +  // 20% weight
+        (defiScore * 0.25) +      // 25% weight
+        (tokenScore * 0.10)       // 10% weight
+      ) * 100); // Convert to 0-100 scale
+
+      console.log(`Score breakdown for ${address}:`, {
+        normalized: {
+          walletAge: Math.round(walletAge * 100) / 100,
+          balanceScore: Math.round(balanceScore * 100) / 100,
+          activityScore: Math.round(activityScore * 100) / 100,
+          defiScore: Math.round(defiScore * 100) / 100,
+          tokenScore: Math.round(tokenScore * 100) / 100
+        },
+        weighted: {
+          walletAge: Math.round(walletAge * 0.20 * 100),
+          balanceScore: Math.round(balanceScore * 0.25 * 100),
+          activityScore: Math.round(activityScore * 0.20 * 100),
+          defiScore: Math.round(defiScore * 0.25 * 100),
+          tokenScore: Math.round(tokenScore * 0.10 * 100)
+        },
+        totalScore: Math.round(totalScore)
+      });
+      
+      // Debug: Log the raw data to see what we're getting
+      console.log(`Raw data for ${address}:`, {
+        balance: balance,
+        transactionCount: transactions.transfers ? transactions.transfers.length : 0,
+        tokenCount: tokenTransfers.tokenBalances ? tokenTransfers.tokenBalances.length : 0,
+        tokenBalances: tokenTransfers.tokenBalances ? tokenTransfers.tokenBalances.slice(0, 3) : 'none' // Show first 3 tokens
+      });
+
+      return Math.round(totalScore);
+    })();
+    
+    // Race between scoring and timeout
+    return await Promise.race([scoringPromise, timeoutPromise]);
+    
   } catch (error) {
     console.error('Error calculating score:', error);
-    // Fallback to deterministic scoring if API fails
+    console.log(`Falling back to deterministic scoring for ${address}`);
+    // Fallback to deterministic scoring if API fails or times out
     const cleanAddress = address.toLowerCase().replace('0x', '');
     const lastByte = cleanAddress.slice(-2);
     const score = parseInt(lastByte, 16);
@@ -100,55 +140,72 @@ async function calculateScore(address) {
   }
 }
 
-// Calculate wallet age score (0-20 points)
+// Calculate wallet age score (0-1 normalized)
 async function calculateWalletAge(address, transactions) {
   if (!transactions.transfers || transactions.transfers.length === 0) {
     return 0; // New wallet
   }
   
   const firstTx = transactions.transfers[transactions.transfers.length - 1];
-  const firstTxDate = new Date(firstTx.blockNum);
+  
+  // Get the block timestamp from Alchemy
+  let firstTxDate;
+  try {
+    if (firstTx.blockNum) {
+      // Convert block number to timestamp
+      const block = await alchemy.core.getBlock(firstTx.blockNum);
+      firstTxDate = new Date(block.timestamp * 1000);
+    } else {
+      // Fallback: assume recent if no block data
+      firstTxDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000); // 30 days ago
+    }
+  } catch (error) {
+    console.log(`Could not get block data for ${address}, using fallback`);
+    // Fallback: assume 1 year old wallet
+    firstTxDate = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
+  }
+  
   const now = new Date();
   const daysOld = (now - firstTxDate) / (1000 * 60 * 60 * 24);
   
-  // Score based on age: 0-20 points
-  if (daysOld < 30) return 2;      // Less than 1 month
-  if (daysOld < 90) return 5;      // 1-3 months
-  if (daysOld < 180) return 8;     // 3-6 months
-  if (daysOld < 365) return 12;    // 6-12 months
-  if (daysOld < 730) return 16;    // 1-2 years
-  return 20;                       // 2+ years
+  // Normalize age to 0-1 scale (2+ years = 1.0)
+  const maxAge = 730; // 2 years in days
+  return Math.min(1.0, Math.max(0, daysOld / maxAge));
 }
 
-// Calculate balance score (0-25 points)
+// Calculate balance score (0-1 normalized)
 function calculateBalanceScore(balance) {
-  const ethBalance = parseFloat(ethers.formatEther(balance));
+  // Handle BigNumber objects from Alchemy
+  let balanceValue;
+  if (balance && typeof balance === 'object' && balance._hex) {
+    balanceValue = balance._hex;
+  } else if (typeof balance === 'string') {
+    balanceValue = balance;
+  } else {
+    balanceValue = '0x0';
+  }
   
-  // Score based on ETH balance with diminishing returns
+  const ethBalance = parseFloat(ethers.formatEther(balanceValue));
+  
+  // Normalize balance to 0-1 scale with diminishing returns (50+ ETH = 1.0)
   if (ethBalance < 0.01) return 0;
-  if (ethBalance < 0.1) return 2;
-  if (ethBalance < 0.5) return 5;
-  if (ethBalance < 1) return 8;
-  if (ethBalance < 5) return 12;
-  if (ethBalance < 10) return 16;
-  if (ethBalance < 50) return 20;
-  return 25; // 50+ ETH
+  
+  // Use logarithmic scaling for diminishing returns
+  const maxBalance = 50; // 50 ETH = max score
+  const normalizedBalance = Math.min(1.0, Math.log10(ethBalance + 1) / Math.log10(maxBalance + 1));
+  return normalizedBalance;
 }
 
-// Calculate activity score (0-20 points)
+// Calculate activity score (0-1 normalized)
 function calculateActivityScore(transactions) {
   const txCount = transactions.transfers ? transactions.transfers.length : 0;
   
-  // Score based on transaction count (moderate activity is best)
-  if (txCount < 5) return 2;
-  if (txCount < 20) return 5;
-  if (txCount < 50) return 10;
-  if (txCount < 100) return 15;
-  if (txCount < 500) return 18;
-  return 20; // 500+ transactions
+  // Normalize activity to 0-1 scale (500+ transactions = 1.0)
+  const maxTransactions = 500;
+  return Math.min(1.0, txCount / maxTransactions);
 }
 
-// Calculate DeFi usage score (0-25 points)
+// Calculate DeFi usage score (0-1 normalized)
 function calculateDeFiScore(transactions) {
   if (!transactions.transfers) return 0;
   
@@ -170,31 +227,22 @@ function calculateDeFiScore(transactions) {
     }
   });
   
-  // Score based on number of DeFi protocols used
+  // Normalize DeFi usage to 0-1 scale (5+ protocols = 1.0)
   const protocolCount = defiProtocols.size;
-  if (protocolCount === 0) return 0;
-  if (protocolCount === 1) return 5;
-  if (protocolCount === 2) return 10;
-  if (protocolCount === 3) return 15;
-  if (protocolCount === 4) return 20;
-  return 25; // 5+ protocols
+  const maxProtocols = 5;
+  return Math.min(1.0, protocolCount / maxProtocols);
 }
 
-// Calculate token diversity score (0-10 points)
+// Calculate token diversity score (0-1 normalized)
 function calculateTokenScore(tokenTransfers) {
   if (!tokenTransfers.tokenBalances) return 0;
   
-  const tokenCount = tokenTransfers.tokenBalances.filter(token => 
-    parseFloat(token.tokenBalance) > 0
-  ).length;
+  // Count total tokens the wallet has interacted with (not just current holdings)
+  const totalTokenCount = tokenTransfers.tokenBalances.length;
   
-  // Score based on token diversity
-  if (tokenCount === 0) return 0;
-  if (tokenCount === 1) return 2;
-  if (tokenCount === 2) return 4;
-  if (tokenCount === 3) return 6;
-  if (tokenCount === 4) return 8;
-  return 10; // 5+ tokens
+  // Normalize token diversity to 0-1 scale (100+ tokens = 1.0)
+  const maxTokens = 100;
+  return Math.min(1.0, totalTokenCount / maxTokens);
 }
 
 function getStatus(score) {
@@ -301,6 +349,25 @@ app.get('/', (req, res) => {
 
 app.get('/health', (req, res) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+});
+
+// Performance metrics endpoint
+app.get('/metrics', (req, res) => {
+  const start = Date.now();
+  
+  // Simulate some work to test performance
+  setTimeout(() => {
+    const duration = Date.now() - start;
+    res.json({
+      status: 'healthy',
+      performance: {
+        response_time_ms: duration,
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        memory_usage: process.memoryUsage()
+      }
+    });
+  }, Math.random() * 100); // Random delay 0-100ms
 });
 
 // Test endpoint to list available badges
