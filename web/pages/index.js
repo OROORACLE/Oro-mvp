@@ -280,6 +280,7 @@ function HomeContent() {
     // More realistic scoring based on address characteristics
     const cleanAddr = addr.toLowerCase().replace('0x', '');
     let score = 0;
+    let riskFlags = [];
     
     // Base score from last 4 characters
     const lastFour = cleanAddr.slice(-4);
@@ -287,24 +288,53 @@ function HomeContent() {
     
     // Add some randomness based on address patterns
     const hasRepeating = /(.)\1{2,}/.test(cleanAddr);
-    if (hasRepeating) score -= 15; // Penalty for suspicious patterns
+    if (hasRepeating) {
+      score -= 15; // Penalty for suspicious patterns
+      riskFlags.push({
+        type: 'MEDIUM',
+        category: 'SUSPICIOUS_PATTERN',
+        message: 'Repeating character pattern detected',
+        severity: 'WARNING'
+      });
+    }
     
     const hasSequential = /0123|1234|2345|3456|4567|5678|6789|789a|89ab|9abc|abcd|bcde|cdef|def0|ef01|f012/.test(cleanAddr);
-    if (hasSequential) score -= 10; // Penalty for sequential patterns
+    if (hasSequential) {
+      score -= 10; // Penalty for sequential patterns
+      riskFlags.push({
+        type: 'MEDIUM',
+        category: 'SUSPICIOUS_PATTERN',
+        message: 'Sequential character pattern detected',
+        severity: 'WARNING'
+      });
+    }
     
     // Bonus for "real" looking addresses
     const hasMixedCase = /[A-F]/.test(addr) && /[a-f]/.test(addr);
     if (hasMixedCase) score += 5;
     
+    // Add some demo risk flags for low scores
+    if (score < 30) {
+      riskFlags.push({
+        type: 'LOW',
+        category: 'ACTIVITY_LEVEL',
+        message: 'Limited transaction history',
+        severity: 'INFO'
+      });
+    }
+    
     // Ensure score is between 0-100
     score = Math.max(0, Math.min(100, score));
     
-    const status = score >= 80 ? "Trusted" : score >= 50 ? "Stable" : "New/Unproven";
+    const status = score >= 75 ? "Trusted" : score >= 50 ? "Stable" : "New/Unproven";
+    const riskLevel = score < 30 ? 'HIGH' : score < 50 ? 'MEDIUM' : 'LOW';
     
     return {
       address: addr.toLowerCase(),
       score: score,
       status: status,
+      riskFlags: riskFlags,
+      riskLevel: riskLevel,
       updatedAt: new Date().toISOString()
     };
   };
@@ -644,6 +674,71 @@ function HomeContent() {
                   </div>
                 </div>
               </div>
+
+              {/* Risk Flags Display */}
+              {score && score.riskFlags && score.riskFlags.length > 0 && (
+                <div style={{
+                  background: score.riskLevel === 'HIGH' ? '#fef2f2' : score.riskLevel === 'MEDIUM' ? '#fffbeb' : '#f0f9ff',
+                  border: `2px solid ${score.riskLevel === 'HIGH' ? '#fca5a5' : score.riskLevel === 'MEDIUM' ? '#fbbf24' : '#60a5fa'}`,
+                  borderRadius: '15px',
+                  padding: '20px',
+                  marginBottom: '20px'
+                }}>
+                  <h4 style={{
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                    color: '#333',
+                    marginBottom: '15px',
+                    textAlign: 'center'
+                  }}>
+                    {score.riskLevel === 'HIGH' ? '🚨 High Risk Flags' : 
+                     score.riskLevel === 'MEDIUM' ? '⚠️ Medium Risk Flags' : 
+                     'ℹ️ Risk Information'}
+                  </h4>
+                  
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px'
+                  }}>
+                    {score.riskFlags.map((flag, index) => (
+                      <div key={index} style={{
+                        background: 'white',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '8px',
+                        padding: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px'
+                      }}>
+                        <div style={{
+                          width: '8px',
+                          height: '8px',
+                          borderRadius: '50%',
+                          background: flag.severity === 'CRITICAL' ? '#ef4444' : 
+                                     flag.severity === 'WARNING' ? '#f59e0b' : '#3b82f6'
+                        }}></div>
+                        <div style={{
+                          fontSize: '14px',
+                          color: '#374151',
+                          flex: 1
+                        }}>
+                          {flag.message}
+                        </div>
+                        <div style={{
+                          fontSize: '12px',
+                          color: '#6b7280',
+                          background: '#f3f4f6',
+                          padding: '2px 8px',
+                          borderRadius: '4px'
+                        }}>
+                          {flag.category.replace('_', ' ')}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Badge Display */}
               {metadata && (
