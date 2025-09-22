@@ -58,32 +58,26 @@ function WalletSection() {
         marginBottom: '20px',
         textAlign: 'center'
       }}>
-        Connect Wallet & Get Reputation Score
+        Check Wallet Reputation
       </h3>
       
-      {!isConnected ? (
-        <div style={{ textAlign: 'center' }}>
-          <p style={{ color: '#666', marginBottom: '20px' }}>
-            Connect your wallet to get your reputation score and credentials
-          </p>
-          <button
-            onClick={() => connect({ connector: connectors[0] })}
-            style={{
-              background: 'linear-gradient(45deg, #667eea, #764ba2)',
-              color: 'white',
-              border: 'none',
-              padding: '15px 30px',
-              borderRadius: '10px',
-              fontSize: '16px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'transform 0.3s ease'
-            }}
-          >
-            Connect Wallet
-          </button>
+      <div style={{ textAlign: 'center' }}>
+        <p style={{ color: '#666', marginBottom: '20px' }}>
+          Enter any Ethereum wallet address to check its reputation score
+        </p>
+        
+        <div style={{
+          background: '#d1ecf1',
+          border: '1px solid #bee5eb',
+          borderRadius: '8px',
+          padding: '10px',
+          marginBottom: '15px',
+          fontSize: '14px',
+          color: '#0c5460'
+        }}>
+          ✅ <strong>No wallet connection needed:</strong> Just enter any address to check its reputation.
         </div>
-      ) : (
+      </div>
         <div>
           <div style={{
             background: '#f0f9ff',
