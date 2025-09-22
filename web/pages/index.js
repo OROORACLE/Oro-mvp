@@ -64,7 +64,7 @@ function WalletSection() {
       {!isConnected ? (
         <div style={{ textAlign: 'center' }}>
           <p style={{ color: '#666', marginBottom: '20px' }}>
-            Connect your wallet to mint your ORO reputation badge on Sepolia
+            Connect your wallet to create your ORO reputation attestation
           </p>
           <button
             onClick={() => connect({ connector: connectors[0] })}
@@ -108,16 +108,15 @@ function WalletSection() {
           
           <div style={{ textAlign: 'center' }}>
             <div style={{
-              background: '#fff3cd',
-              border: '1px solid #ffeaa7',
+              background: '#d1ecf1',
+              border: '1px solid #bee5eb',
               borderRadius: '8px',
               padding: '10px',
               marginBottom: '15px',
               fontSize: '14px',
-              color: '#856404'
+              color: '#0c5460'
             }}>
-              ⚠️ <strong>Testnet Only:</strong> Badge minting is currently limited to authorized testers. 
-              This is a demo on Sepolia testnet.
+              ✅ <strong>Zero-Gas JWT Attestations:</strong> Get portable reputation credentials without gas fees.
             </div>
             
             <button
@@ -136,7 +135,7 @@ function WalletSection() {
                 transition: 'all 0.3s ease'
               }}
             >
-              {isPending ? 'Confirming...' : isConfirming ? 'Minting...' : 'Mint/Update Badge (Testnet)'}
+              {isPending ? 'Confirming...' : isConfirming ? 'Creating...' : 'Create JWT Attestation'}
             </button>
             
             <button
@@ -205,7 +204,7 @@ function HomeContent() {
 
   // Updated to use new API with performance monitoring and 30-day JWT
   // Triggering deployment with root directory fix
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://orooracle.vercel.app';
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://orooracle-6uopo86y8-loganstafford740-1721s-projects.vercel.app';
 
   // Auto-populate address when wallet connects
   useEffect(() => {
@@ -791,7 +790,7 @@ function HomeContent() {
               🚧 <strong>MVP Status:</strong> Currently in testing phase
             </div>
             <div style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '12px' }}>
-              Badge minting limited to authorized testers • Sepolia testnet only
+              Zero-gas JWT attestations • Portable across all protocols
             </div>
           </div>
           
