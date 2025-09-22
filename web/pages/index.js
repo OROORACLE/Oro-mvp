@@ -51,94 +51,154 @@ function WalletSection() {
       marginBottom: '30px',
       border: '2px solid #e1e5e9'
     }}>
-      <h3 style={{
-        fontSize: '24px',
-        fontWeight: 'bold',
-        color: '#333',
-        marginBottom: '20px',
-        textAlign: 'center'
-      }}>
-        How ORO Works
-      </h3>
-      
       <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-        gap: '20px',
-        marginBottom: '30px'
+        textAlign: 'center',
+        marginBottom: '40px'
       }}>
-        <div style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
-          padding: '25px',
-          borderRadius: '12px',
-          textAlign: 'center'
+        <h2 style={{
+          fontSize: '32px',
+          fontWeight: '700',
+          color: '#1a1a1a',
+          marginBottom: '16px',
+          letterSpacing: '-0.02em'
         }}>
-          <div style={{ fontSize: '32px', marginBottom: '15px' }}>🔍</div>
-          <h4 style={{ margin: '0 0 10px 0', fontSize: '18px' }}>Analyze Onchain Data</h4>
-          <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>
-            We analyze wallet age, transaction history, DeFi usage, and token diversity from Ethereum mainnet
-          </p>
-        </div>
-        
-        <div style={{
-          background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-          color: 'white',
-          padding: '25px',
-          borderRadius: '12px',
-          textAlign: 'center'
+          Onchain Reputation Oracle
+        </h2>
+        <p style={{
+          fontSize: '18px',
+          color: '#666',
+          lineHeight: '1.6',
+          maxWidth: '600px',
+          margin: '0 auto 32px'
         }}>
-          <div style={{ fontSize: '32px', marginBottom: '15px' }}>⚖️</div>
-          <h4 style={{ margin: '0 0 10px 0', fontSize: '18px' }}>Calculate Reputation</h4>
-          <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>
-            Our algorithm weighs 5 key factors to generate a 0-100 reputation score
-          </p>
-        </div>
-        
-        <div style={{
-          background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-          color: 'white',
-          padding: '25px',
-          borderRadius: '12px',
-          textAlign: 'center'
-        }}>
-          <div style={{ fontSize: '32px', marginBottom: '15px' }}>🎫</div>
-          <h4 style={{ margin: '0 0 10px 0', fontSize: '18px' }}>Issue Credentials</h4>
-          <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>
-            Generate zero-gas JWT attestations that protocols can verify instantly
-          </p>
-        </div>
+          The first reputation system that analyzes real onchain behavior to generate portable, verifiable credentials for Web3 protocols.
+        </p>
       </div>
       
       <div style={{
-        background: '#f8f9fa',
-        border: '1px solid #e9ecef',
-        borderRadius: '12px',
-        padding: '25px',
-        marginBottom: '20px'
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: '24px',
+        marginBottom: '40px'
       }}>
-        <h4 style={{ margin: '0 0 15px 0', color: '#333', fontSize: '18px' }}>Scoring Algorithm</h4>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '8px', height: '8px', background: '#667eea', borderRadius: '50%' }}></div>
-            <span style={{ fontSize: '14px', color: '#666' }}>Wallet Age (20%)</span>
+        <div style={{
+          background: 'white',
+          border: '1px solid #e5e7eb',
+          borderRadius: '16px',
+          padding: '32px',
+          textAlign: 'center',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          transition: 'all 0.2s ease'
+        }}>
+          <div style={{
+            width: '64px',
+            height: '64px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            borderRadius: '16px',
+            margin: '0 auto 20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '24px'
+          }}>
+            📊
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '8px', height: '8px', background: '#764ba2', borderRadius: '50%' }}></div>
-            <span style={{ fontSize: '14px', color: '#666' }}>ETH Balance (25%)</span>
+          <h3 style={{
+            fontSize: '20px',
+            fontWeight: '600',
+            color: '#1a1a1a',
+            marginBottom: '12px'
+          }}>
+            Real-Time Analysis
+          </h3>
+          <p style={{
+            fontSize: '15px',
+            color: '#666',
+            lineHeight: '1.5',
+            margin: 0
+          }}>
+            Continuously monitors wallet behavior across Ethereum mainnet to build comprehensive reputation profiles.
+          </p>
+        </div>
+        
+        <div style={{
+          background: 'white',
+          border: '1px solid #e5e7eb',
+          borderRadius: '16px',
+          padding: '32px',
+          textAlign: 'center',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          transition: 'all 0.2s ease'
+        }}>
+          <div style={{
+            width: '64px',
+            height: '64px',
+            background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            borderRadius: '16px',
+            margin: '0 auto 20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '24px'
+          }}>
+            🎯
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '8px', height: '8px', background: '#f093fb', borderRadius: '50%' }}></div>
-            <span style={{ fontSize: '14px', color: '#666' }}>Activity (20%)</span>
+          <h3 style={{
+            fontSize: '20px',
+            fontWeight: '600',
+            color: '#1a1a1a',
+            marginBottom: '12px'
+          }}>
+            Zero-Gas Credentials
+          </h3>
+          <p style={{
+            fontSize: '15px',
+            color: '#666',
+            lineHeight: '1.5',
+            margin: 0
+          }}>
+            Generate portable JWT attestations that protocols can verify instantly without gas fees or blockchain transactions.
+          </p>
+        </div>
+        
+        <div style={{
+          background: 'white',
+          border: '1px solid #e5e7eb',
+          borderRadius: '16px',
+          padding: '32px',
+          textAlign: 'center',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          transition: 'all 0.2s ease'
+        }}>
+          <div style={{
+            width: '64px',
+            height: '64px',
+            background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            borderRadius: '16px',
+            margin: '0 auto 20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '24px'
+          }}>
+            🔗
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '8px', height: '8px', background: '#f5576c', borderRadius: '50%' }}></div>
-            <span style={{ fontSize: '14px', color: '#666' }}>DeFi Usage (25%)</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '8px', height: '8px', background: '#4facfe', borderRadius: '50%' }}></div>
-            <span style={{ fontSize: '14px', color: '#666' }}>Token Diversity (10%)</span>
-          </div>
+          <h3 style={{
+            fontSize: '20px',
+            fontWeight: '600',
+            color: '#1a1a1a',
+            marginBottom: '12px'
+          }}>
+            Protocol Integration
+          </h3>
+          <p style={{
+            fontSize: '15px',
+            color: '#666',
+            lineHeight: '1.5',
+            margin: 0
+          }}>
+            Simple API endpoints for DeFi protocols to access reputation data and make smarter risk decisions.
+          </p>
         </div>
       </div>
     </div>
