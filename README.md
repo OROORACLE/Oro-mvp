@@ -7,16 +7,14 @@ It scores wallets based on onchain behavior and makes that reputation portable a
 
 ## 🚀 Live Demo
 
-- **Frontend:** [https://web-c5yfoj80j-loganstafford740-1721s-projects.vercel.app/](https://web-c5yfoj80j-loganstafford740-1721s-projects.vercel.app/)
-- **API:** [https://orooracle.vercel.app/](https://orooracle.vercel.app/)
-- **Contract:** `0x7fd112d62e3D32bD3667c878dfAf582B18d4266b` (Sepolia)
+- **Frontend:** [https://web-kg5efdlfv-loganstafford740-1721s-projects.vercel.app/](https://web-kg5efdlfv-loganstafford740-1721s-projects.vercel.app/)
+- **API:** [https://orooracle-2g4w1aeof-loganstafford740-1721s-projects.vercel.app/](https://orooracle-2g4w1aeof-loganstafford740-1721s-projects.vercel.app/)
 
 ---
 
 ## What It Does
 - **Real onchain reputation scoring** (0–100) based on actual wallet behavior
 - **Zero-gas JWT attestations** for seamless partner integration
-- **Soulbound badges** that update in real time  
 - **Simple API** for protocol integrations  
 - **Performance monitoring** with real-time analytics
 - **Helps DeFi protocols** reduce risk, reward trusted users, and gate features more intelligently
@@ -41,7 +39,7 @@ ORO analyzes real onchain data to generate reputation scores:
 
 ### 1. Get Wallet Score
 ```bash
-curl "https://orooracle.vercel.app/score/0x1234567890123456789012345678901234567890"
+curl "https://orooracle-2g4w1aeof-loganstafford740-1721s-projects.vercel.app/score/0x1234567890123456789012345678901234567890"
 ```
 
 **Response:**
@@ -54,27 +52,9 @@ curl "https://orooracle.vercel.app/score/0x1234567890123456789012345678901234567
 }
 ```
 
-### 2. Get Badge Metadata
+### 2. Create JWT Attestation (Zero-Gas)
 ```bash
-curl "https://orooracle.vercel.app/metadata/0x1234567890123456789012345678901234567890.json"
-```
-
-**Response:**
-```json
-{
-  "name": "ORO Badge - Stable",
-  "description": "Reputation badge for 0x1234567890123456789012345678901234567890. Score: 56/100",
-  "image": "https://via.placeholder.com/512x512/000000/ffffff?text=ORO+56",
-  "attributes": [
-    { "trait_type": "Score", "value": 56 },
-    { "trait_type": "Status", "value": "Stable" }
-  ]
-}
-```
-
-### 3. Create JWT Attestation (Zero-Gas)
-```bash
-curl -X POST "https://orooracle.vercel.app/v0/attest" \
+curl -X POST "https://orooracle-2g4w1aeof-loganstafford740-1721s-projects.vercel.app/v0/attest" \
   -H "Content-Type: application/json" \
   -d '{"address": "0x1234567890123456789012345678901234567890"}'
 ```
@@ -96,11 +76,25 @@ curl -X POST "https://orooracle.vercel.app/v0/attest" \
 }
 ```
 
-### 4. Mint Badge (Web3)
-1. Visit [https://web-c5yfoj80j-loganstafford740-1721s-projects.vercel.app/](https://web-c5yfoj80j-loganstafford740-1721s-projects.vercel.app/)
-2. Connect your wallet
-3. Click "Mint/Update Badge"
-4. Your soulbound reputation badge is minted on Sepolia!
+### 3. Verify JWT Attestation
+```bash
+curl -X POST "https://orooracle-2g4w1aeof-loganstafford740-1721s-projects.vercel.app/v0/verify" \
+  -H "Content-Type: application/json" \
+  -d '{"jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."}'
+```
+
+**Response:**
+```json
+{
+  "valid": true,
+  "claims": {
+    "sub": "0x1234567890123456789012345678901234567890",
+    "tier": "Stable",
+    "score": 75,
+    "exp": 1737369000
+  }
+}
+```
 
 ---
 
@@ -115,8 +109,8 @@ curl -X POST "https://orooracle.vercel.app/v0/attest" \
 ---
 
 ## 🔗 Quick Links
-- [Live Demo](https://web-c5yfoj80j-loganstafford740-1721s-projects.vercel.app/)
-- [API Documentation](https://orooracle.vercel.app/)
+- [Live Demo](https://web-kg5efdlfv-loganstafford740-1721s-projects.vercel.app/)
+- [API Documentation](https://orooracle-2g4w1aeof-loganstafford740-1721s-projects.vercel.app/)
 - [Twitter](https://x.com/Orooracle)
 - [Notion One-Pager](https://www.notion.so/oro-reputation-oracle) _(coming soon)_
 - [Pitch Deck](https://docs.google.com/presentation/d/oro-pitch) _(coming soon)_
