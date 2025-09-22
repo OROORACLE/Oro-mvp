@@ -58,132 +58,89 @@ function WalletSection() {
         marginBottom: '20px',
         textAlign: 'center'
       }}>
-        Check Wallet Reputation
+        How ORO Works
       </h3>
       
-      <div style={{ textAlign: 'center' }}>
-        <p style={{ color: '#666', marginBottom: '20px' }}>
-          Enter any Ethereum wallet address to check its reputation score
-        </p>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: '20px',
+        marginBottom: '30px'
+      }}>
+        <div style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          padding: '25px',
+          borderRadius: '12px',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontSize: '32px', marginBottom: '15px' }}>🔍</div>
+          <h4 style={{ margin: '0 0 10px 0', fontSize: '18px' }}>Analyze Onchain Data</h4>
+          <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>
+            We analyze wallet age, transaction history, DeFi usage, and token diversity from Ethereum mainnet
+          </p>
+        </div>
         
         <div style={{
-          background: '#d1ecf1',
-          border: '1px solid #bee5eb',
-          borderRadius: '8px',
-          padding: '10px',
-          marginBottom: '15px',
-          fontSize: '14px',
-          color: '#0c5460'
+          background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+          color: 'white',
+          padding: '25px',
+          borderRadius: '12px',
+          textAlign: 'center'
         }}>
-          ✅ <strong>No wallet connection needed:</strong> Just enter any address to check its reputation.
+          <div style={{ fontSize: '32px', marginBottom: '15px' }}>⚖️</div>
+          <h4 style={{ margin: '0 0 10px 0', fontSize: '18px' }}>Calculate Reputation</h4>
+          <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>
+            Our algorithm weighs 5 key factors to generate a 0-100 reputation score
+          </p>
+        </div>
+        
+        <div style={{
+          background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+          color: 'white',
+          padding: '25px',
+          borderRadius: '12px',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontSize: '32px', marginBottom: '15px' }}>🎫</div>
+          <h4 style={{ margin: '0 0 10px 0', fontSize: '18px' }}>Issue Credentials</h4>
+          <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>
+            Generate zero-gas JWT attestations that protocols can verify instantly
+          </p>
         </div>
       </div>
-        <div>
-          <div style={{
-            background: '#f0f9ff',
-            border: '2px solid #0ea5e9',
-            borderRadius: '10px',
-            padding: '20px',
-            marginBottom: '20px',
-            textAlign: 'center'
-          }}>
-            <div style={{ color: '#0ea5e9', fontWeight: '600', marginBottom: '10px' }}>
-              ✅ Wallet Connected
-            </div>
-            <div style={{
-              fontFamily: 'monospace',
-              fontSize: '14px',
-              color: '#333',
-              wordBreak: 'break-all'
-            }}>
-              {address}
-            </div>
+      
+      <div style={{
+        background: '#f8f9fa',
+        border: '1px solid #e9ecef',
+        borderRadius: '12px',
+        padding: '25px',
+        marginBottom: '20px'
+      }}>
+        <h4 style={{ margin: '0 0 15px 0', color: '#333', fontSize: '18px' }}>Scoring Algorithm</h4>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '8px', height: '8px', background: '#667eea', borderRadius: '50%' }}></div>
+            <span style={{ fontSize: '14px', color: '#666' }}>Wallet Age (20%)</span>
           </div>
-          
-          <div style={{ textAlign: 'center' }}>
-            <div style={{
-              background: '#d1ecf1',
-              border: '1px solid #bee5eb',
-              borderRadius: '8px',
-              padding: '10px',
-              marginBottom: '15px',
-              fontSize: '14px',
-              color: '#0c5460'
-            }}>
-              ✅ <strong>Zero-Gas Reputation:</strong> Get your reputation score and credentials without gas fees.
-            </div>
-            
-            <button
-              onClick={handleMint}
-              disabled={isPending || isConfirming}
-              style={{
-                background: isPending || isConfirming ? '#ccc' : 'linear-gradient(45deg, #667eea, #764ba2)',
-                color: 'white',
-                border: 'none',
-                padding: '15px 30px',
-                borderRadius: '10px',
-                fontSize: '16px',
-                fontWeight: '600',
-                cursor: isPending || isConfirming ? 'not-allowed' : 'pointer',
-                marginRight: '15px',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              {isPending ? 'Confirming...' : isConfirming ? 'Creating...' : 'Get Reputation Score'}
-            </button>
-            
-            <button
-              onClick={() => {
-                resetWriteContract();
-                disconnect();
-              }}
-              style={{
-                background: 'transparent',
-                color: '#666',
-                border: '2px solid #e1e5e9',
-                padding: '15px 30px',
-                borderRadius: '10px',
-                fontSize: '16px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              Disconnect
-            </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '8px', height: '8px', background: '#764ba2', borderRadius: '50%' }}></div>
+            <span style={{ fontSize: '14px', color: '#666' }}>ETH Balance (25%)</span>
           </div>
-          
-          {hash && (
-            <div style={{
-              background: '#f0fdf4',
-              border: '2px solid #22c55e',
-              borderRadius: '10px',
-              padding: '20px',
-              marginTop: '20px',
-              textAlign: 'center'
-            }}>
-              <div style={{ color: '#22c55e', fontWeight: '600', marginBottom: '10px' }}>
-                {isConfirmed ? '✅ Transaction Confirmed!' : '⏳ Transaction Pending...'}
-              </div>
-              <div style={{
-                fontFamily: 'monospace',
-                fontSize: '12px',
-                color: '#333',
-                wordBreak: 'break-all'
-              }}>
-                <a 
-                  href={`https://sepolia.etherscan.io/tx/${hash}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: '#22c55e', textDecoration: 'none' }}
-                >
-                  View on Etherscan: {hash}
-                </a>
-              </div>
-            </div>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '8px', height: '8px', background: '#f093fb', borderRadius: '50%' }}></div>
+            <span style={{ fontSize: '14px', color: '#666' }}>Activity (20%)</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '8px', height: '8px', background: '#f5576c', borderRadius: '50%' }}></div>
+            <span style={{ fontSize: '14px', color: '#666' }}>DeFi Usage (25%)</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '8px', height: '8px', background: '#4facfe', borderRadius: '50%' }}></div>
+            <span style={{ fontSize: '14px', color: '#666' }}>Token Diversity (10%)</span>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
@@ -781,7 +738,7 @@ function HomeContent() {
             textAlign: 'center'
           }}>
             <div style={{ color: 'white', fontSize: '14px', marginBottom: '5px' }}>
-              🚧 <strong>MVP Status:</strong> Currently in testing phase
+              <strong>MVP Status:</strong> Currently in testing phase
             </div>
             <div style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '12px' }}>
               Zero-gas reputation scores • Portable across all protocols
@@ -827,7 +784,8 @@ function HomeContent() {
             }}>
               <div style={{
                 fontSize: '48px',
-                marginBottom: '20px'
+                marginBottom: '20px',
+                color: '#667eea'
               }}>⚡</div>
               <h3 style={{
                 fontSize: '24px',
