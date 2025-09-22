@@ -1,0 +1,6 @@
+exit
+npx hardhat run scripts/update-metadata-direct.js --network sepolia
+$env:PRIVATE_KEY="0xa7dd16a6f9dd48308c0614ca022451869f61a2a03325cbd9dbd46455b7d1e8f9"
+$env:RPC_URL="https://sepolia.infura.io/v3/0c92cb9be774484c9ee8ca5ecb753b46"
+$env:RPC_URL="https://sepolia.infura.io/v3/0c92cb9be774484c9ee8ca5ecb753b46"; $env:PRIVATE_KEY="0xa7dd16a6f9dd48308c0614ca022451869f61a2a03325cbd9dbd46455b7d1e8f9"; npx hardhat run scripts/update-metadata-direct.js --network sepolia
+npx hardhat run scripts/deploy-sepolia.js
