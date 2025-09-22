@@ -58,13 +58,13 @@ function WalletSection() {
         marginBottom: '20px',
         textAlign: 'center'
       }}>
-        Connect Wallet & Mint Badge
+        Connect Wallet & Get Reputation Score
       </h3>
       
       {!isConnected ? (
         <div style={{ textAlign: 'center' }}>
           <p style={{ color: '#666', marginBottom: '20px' }}>
-            Connect your wallet to create your ORO reputation attestation
+            Connect your wallet to get your reputation score and credentials
           </p>
           <button
             onClick={() => connect({ connector: connectors[0] })}
@@ -116,7 +116,7 @@ function WalletSection() {
               fontSize: '14px',
               color: '#0c5460'
             }}>
-              ✅ <strong>Zero-Gas JWT Attestations:</strong> Get portable reputation credentials without gas fees.
+              ✅ <strong>Zero-Gas Reputation:</strong> Get your reputation score and credentials without gas fees.
             </div>
             
             <button
@@ -135,7 +135,7 @@ function WalletSection() {
                 transition: 'all 0.3s ease'
               }}
             >
-              {isPending ? 'Confirming...' : isConfirming ? 'Creating...' : 'Create JWT Attestation'}
+              {isPending ? 'Confirming...' : isConfirming ? 'Creating...' : 'Get Reputation Score'}
             </button>
             
             <button
@@ -790,7 +790,7 @@ function HomeContent() {
               🚧 <strong>MVP Status:</strong> Currently in testing phase
             </div>
             <div style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '12px' }}>
-              Zero-gas JWT attestations • Portable across all protocols
+              Zero-gas reputation scores • Portable across all protocols
             </div>
           </div>
           

@@ -18,6 +18,7 @@ app.use(cors({
     'https://web-eqaphg4cx-loganstafford740-1721s-projects.vercel.app',
     'https://web-ashen-two.vercel.app',
     'https://web-c5yfoj80j-loganstafford740-1721s-projects.vercel.app',
+    'https://web-jb0qx9tss-loganstafford740-1721s-projects.vercel.app', // Latest frontend URL
     'http://localhost:3000',
     'http://localhost:3001'
   ],
