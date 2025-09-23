@@ -249,7 +249,7 @@ function HomeContent() {
     setMetadata(null);
 
     try {
-      // Try to fetch from API first
+      // Fetch from API
       const scoreResponse = await fetch(`${apiBaseUrl}/score/${address}`);
       if (scoreResponse.ok) {
         const scoreData = await scoreResponse.json();
@@ -261,112 +261,21 @@ function HomeContent() {
           setMetadata(metadataData);
         }
       } else {
-        // Fallback: Generate realistic demo data
-        const demoScore = generateRealisticScore(address);
-        setScore(demoScore);
-        setMetadata(generateMetadata(address, demoScore));
+        // API error - show error message
+        setScore(null);
+        setMetadata(null);
+        console.error('API Error:', scoreResponse.status, scoreResponse.statusText);
       }
     } catch (err) {
-      // Fallback: Generate realistic demo data
-      const demoScore = generateRealisticScore(address);
-      setScore(demoScore);
-      setMetadata(generateMetadata(address, demoScore));
+      // Network error - show error message
+      setScore(null);
+      setMetadata(null);
+      console.error('Network Error:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const generateRealisticScore = (addr) => {
-    // More realistic scoring based on address characteristics
-    const cleanAddr = addr.toLowerCase().replace('0x', '');
-    let score = 0;
-    let riskFlags = [];
-    
-    // Base score from last 4 characters
-    const lastFour = cleanAddr.slice(-4);
-    score += parseInt(lastFour, 16) % 100;
-    
-    // Add some randomness based on address patterns
-    const hasRepeating = /(.)\1{2,}/.test(cleanAddr);
-    if (hasRepeating) {
-      score -= 15; // Penalty for suspicious patterns
-      riskFlags.push({
-        type: 'MEDIUM',
-        category: 'SUSPICIOUS_PATTERN',
-        message: 'Repeating character pattern detected',
-        severity: 'WARNING'
-      });
-    }
-    
-    const hasSequential = /0123|1234|2345|3456|4567|5678|6789|789a|89ab|9abc|abcd|bcde|cdef|def0|ef01|f012/.test(cleanAddr);
-    if (hasSequential) {
-      score -= 10; // Penalty for sequential patterns
-      riskFlags.push({
-        type: 'MEDIUM',
-        category: 'SUSPICIOUS_PATTERN',
-        message: 'Sequential character pattern detected',
-        severity: 'WARNING'
-      });
-    }
-    
-    // Bonus for "real" looking addresses
-    const hasMixedCase = /[A-F]/.test(addr) && /[a-f]/.test(addr);
-    if (hasMixedCase) score += 5;
-    
-    // Add some demo risk flags for low scores
-    if (score < 30) {
-      riskFlags.push({
-        type: 'LOW',
-        category: 'ACTIVITY_LEVEL',
-        message: 'Limited transaction history',
-        severity: 'INFO'
-      });
-    }
-    
-    // Ensure score is between 0-100
-    score = Math.max(0, Math.min(100, score));
-    
-    const status = score >= 75 ? "Trusted" : score >= 50 ? "Stable" : "New/Unproven";
-    const riskLevel = score < 30 ? 'HIGH' : score < 50 ? 'MEDIUM' : 'LOW';
-    
-    return {
-      address: addr.toLowerCase(),
-      score: score,
-      status: status,
-      riskFlags: riskFlags,
-      riskLevel: riskLevel,
-      updatedAt: new Date().toISOString()
-    };
-  };
-
-  const generateMetadata = (addr, scoreData) => {
-    const status = scoreData.status;
-    const score = scoreData.score;
-    
-  // Use real badge images based on status
-  let badgeImage;
-  const githubBaseUrl = 'https://raw.githubusercontent.com/OROORACLE/oro-mvp/master/images/badges';
-  const cacheBuster = Date.now(); // Force cache refresh
-  if (status === "Trusted") {
-    badgeImage = `${githubBaseUrl}/trusted.png?v=${cacheBuster}`;
-  } else if (status === "Stable") {
-    badgeImage = `${githubBaseUrl}/stable.png?v=${cacheBuster}`;
-  } else {
-    badgeImage = `${githubBaseUrl}/new-unproven.png?v=${cacheBuster}`;
-  }
-    
-    return {
-      name: `ORO Badge - ${status}`,
-      description: `Reputation badge for ${addr}. This wallet has a reputation score of ${score}/100 based on onchain behavior analysis.`,
-      image: badgeImage,
-      attributes: [
-        { trait_type: "Score", value: score },
-        { trait_type: "Status", value: status },
-        { trait_type: "Network", value: "Ethereum" },
-        { trait_type: "Analysis Date", value: new Date().toLocaleDateString() }
-      ]
-    };
-  };
 
   return (
     <div style={{
@@ -578,6 +487,25 @@ function HomeContent() {
               color: '#c33'
             }}>
               {error}
+            </div>
+          )}
+
+          {/* Error Display */}
+          {!score && !loading && (
+            <div style={{
+              background: '#fef2f2',
+              border: '2px solid #fca5a5',
+              borderRadius: '15px',
+              padding: '20px',
+              marginTop: '40px',
+              textAlign: 'center'
+            }}>
+              <h3 style={{ color: '#dc2626', margin: '0 0 10px 0' }}>
+                ⚠️ Unable to fetch score
+              </h3>
+              <p style={{ color: '#7f1d1d', margin: 0 }}>
+                The API is currently unavailable. Please try again later.
+              </p>
             </div>
           )}
 
