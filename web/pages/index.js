@@ -255,11 +255,21 @@ function HomeContent() {
         const scoreData = await scoreResponse.json();
         setScore(scoreData);
 
-        const metadataResponse = await fetch(`${apiBaseUrl}/metadata/${address}.json`);
-        if (metadataResponse.ok) {
-          const metadataData = await metadataResponse.json();
-          setMetadata(metadataData);
-        }
+        // Generate metadata from score data to ensure consistency
+        const metadataData = {
+          name: `ORO Badge - ${scoreData.status}`,
+          description: `Reputation badge for ${address}. Score: ${scoreData.score}/100`,
+          image: scoreData.status === "Trusted" 
+            ? "https://raw.githubusercontent.com/OROORACLE/oro-mvp/master/images/badges/trusted.png"
+            : scoreData.status === "Stable"
+            ? "https://raw.githubusercontent.com/OROORACLE/oro-mvp/master/images/badges/stable.png"
+            : "https://raw.githubusercontent.com/OROORACLE/oro-mvp/master/images/badges/new-unproven.png",
+          attributes: [
+            { trait_type: "Score", value: scoreData.score },
+            { trait_type: "Status", value: scoreData.status }
+          ]
+        };
+        setMetadata(metadataData);
       } else {
         // API error - show error message
         setScore(null);
