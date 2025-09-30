@@ -31,11 +31,11 @@ ORO is building the infrastructure for Web3 reputation. We analyze onchain behav
 ### 1. Score Generation
 - **Real onchain analysis** of wallet behavior patterns
 - **Weighted scoring algorithm** (0-100) based on:
-  - Wallet Age (20%) - Time since first transaction
-  - ETH Balance (25%) - Current balance with diminishing returns
-  - Transaction Activity (20%) - Frequency and patterns
-  - DeFi Usage (25%) - Protocol interactions
-  - Token Diversity (10%) - Portfolio variety
+  - Transaction Activity (40%) - Frequency and patterns (most important in DeFi)
+  - DeFi Usage (25%) - Protocol interactions (key indicator)
+  - Wallet Age (15%) - Time since first transaction (less critical in fast-moving DeFi)
+  - Token Diversity (15%) - Portfolio variety (important for DeFi users)
+  - ETH Balance (5%) - Current balance with diminishing returns (least important in DeFi)
 - **Updates in real-time** as behavior changes
 
 ### 2. Badge Minting

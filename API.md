@@ -20,11 +20,11 @@ ORO uses real onchain data analysis to generate reputation scores (0-100):
 
 | Factor | Weight | Description |
 |--------|--------|-------------|
-| **Wallet Age** | 20% | Time since first transaction (older = better) |
-| **ETH Balance** | 25% | Current balance with diminishing returns |
-| **Transaction Activity** | 20% | Transaction count and patterns |
+| **Transaction Activity** | 40% | Transaction count and patterns (most important in DeFi) |
 | **DeFi Usage** | 25% | Protocol interactions (Uniswap, Aave, Compound, etc.) |
-| **Token Diversity** | 10% | Number of different tokens held |
+| **Wallet Age** | 15% | Time since first transaction (less critical in fast-moving DeFi) |
+| **Token Diversity** | 15% | Number of different tokens held (important for DeFi users) |
+| **ETH Balance** | 5% | Current balance with diminishing returns (least important in DeFi) |
 
 **Data Source:** Ethereum Mainnet via Alchemy API
 
