@@ -89,14 +89,14 @@ async function calculateScore(address) {
       const defiScore = calculateDeFiScore(transactions);
       const tokenScore = calculateTokenScore(tokenTransfers);
 
-      // Weighted scoring (total: 100 points)
-      const totalScore = Math.min(100, Math.max(0,
-        (walletAge * 0.20) +      // 20% weight
-        (balanceScore * 0.25) +   // 25% weight  
-        (activityScore * 0.20) +  // 20% weight
-        (defiScore * 0.25) +      // 25% weight
-        (tokenScore * 0.10)       // 10% weight
-      ) * 100); // Convert to 0-100 scale
+      // Apply weights and calculate total score (DeFi-optimized)
+      let totalScore = Math.round(
+        (activityScore * 0.40 +  // 40% - Activity is most important in DeFi
+         defiScore * 0.25 +      // 25% - DeFi usage is key indicator
+         walletAge * 0.15 +      // 15% - Age less critical in fast-moving DeFi
+         tokenScore * 0.15 +     // 15% - Token diversity matters for DeFi users
+         balanceScore * 0.05) * 100 // 5% - Balance least important in DeFi
+      );
 
       console.log(`Score breakdown for ${address}:`, {
         normalized: {
@@ -210,28 +210,67 @@ function calculateActivityScore(transactions) {
 function calculateDeFiScore(transactions) {
   if (!transactions.transfers) return 0;
   
+  // Enhanced DeFi protocol detection
   const defiProtocols = new Set();
-  const defiContracts = {
-    '0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9': 'Aave',
-    '0x7a250d5630b4cf539739df2c5dacb4c659f2488d': 'Uniswap V2',
-    '0xe592427a0aece92de3edee1f18e0157c05861564': 'Uniswap V3',
-    '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45': 'Uniswap V3',
-    '0x1111111254eeb25477b68fb85ed929f73a960582': '1inch',
-    '0x881d40237659c251811cec9c364ef91dc08d300c': 'Metamask Swap',
-    '0x3ee77595a8459e93c2888b13adb354017b198188': 'Compound',
-    '0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5': 'Compound',
+  const categories = new Set();
+  let weightedScore = 0;
+  
+  // Known DeFi protocols with weights
+  const knownProtocols = {
+    '0x7a250d5630b4cf539739df2c5dacb4c659f2488d': { name: 'Uniswap V2', weight: 1.0 },
+    '0xe592427a0aece92de3edee1f18e0157c05861564': { name: 'Uniswap V3', weight: 1.0 },
+    '0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9': { name: 'Aave V2', weight: 1.0 },
+    '0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2': { name: 'Aave V3', weight: 1.0 },
+    '0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b': { name: 'Compound', weight: 1.0 },
+    '0x1111111254eeb25477b68fb85ed929f73a960582': { name: '1inch', weight: 1.0 },
+    '0x881d40237659c251811cec9c364ef91dc08d300c': { name: 'Metamask Swap', weight: 0.7 },
+    '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45': { name: 'Uniswap V3 Router', weight: 1.0 }
   };
   
   transactions.transfers.forEach(tx => {
-    if (defiContracts[tx.to]) {
-      defiProtocols.add(defiContracts[tx.to]);
+    // Check contract address
+    if (tx.rawContract && tx.rawContract.address) {
+      const contractAddr = tx.rawContract.address.toLowerCase();
+      if (knownProtocols[contractAddr]) {
+        defiProtocols.add(knownProtocols[contractAddr].name);
+        weightedScore += knownProtocols[contractAddr].weight;
+        categories.add('defi_protocol');
+      }
+    }
+    
+    // Check 'to' address for DeFi protocols
+    if (tx.to) {
+      const toAddr = tx.to.toLowerCase();
+      if (knownProtocols[toAddr]) {
+        defiProtocols.add(knownProtocols[toAddr].name);
+        weightedScore += knownProtocols[toAddr].weight * 0.8; // Slightly lower weight for 'to' address
+        categories.add('defi_protocol');
+      }
+    }
+    
+    // Check for ERC-20 token interactions (indicates DeFi usage)
+    if (tx.category === 'erc20' && tx.asset && tx.asset !== 'ETH') {
+      categories.add('token_interaction');
+      weightedScore += 0.3;
     }
   });
   
-  // Normalize DeFi usage to 0-1 scale (5+ protocols = 1.0)
-  const protocolCount = defiProtocols.size;
-  const maxProtocols = 5;
-  return Math.min(1.0, protocolCount / maxProtocols);
+  // Calculate final score with sophisticated weighting
+  let finalScore = 0;
+  
+  // Base score from protocol diversity (0-0.4)
+  const protocolDiversityScore = Math.min(0.4, defiProtocols.size / 8);
+  finalScore += protocolDiversityScore;
+  
+  // Category diversity bonus (0-0.3)
+  const categoryDiversityScore = Math.min(0.3, categories.size / 2);
+  finalScore += categoryDiversityScore;
+  
+  // Weighted interaction score (0-0.3)
+  const interactionScore = Math.min(0.3, weightedScore / 10);
+  finalScore += interactionScore;
+  
+  return Math.min(1.0, Math.max(0, finalScore));
 }
 
 // Calculate token diversity score (0-1 normalized)
