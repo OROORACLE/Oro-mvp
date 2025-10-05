@@ -5,6 +5,9 @@ const { ethers } = require('ethers');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
+// Import scoring functions
+const { calculateScore } = require('./scoring');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
