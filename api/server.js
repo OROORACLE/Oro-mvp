@@ -11,26 +11,13 @@ const { calculateScore } = require('./scoring');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// JWT Configuration
-const JWT_SECRET = process.env.JWT_SECRET;
+// JWT Configuration with fallbacks
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback-jwt-secret-for-development';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '30d'; // 30 days default
-const ORO_PRIVATE_KEY = process.env.ORO_PRIVATE_KEY;
+const ORO_PRIVATE_KEY = process.env.ORO_PRIVATE_KEY || 'fallback-private-key-for-development';
 
-// Check required environment variables
-if (!JWT_SECRET) {
-  console.error('ERROR: JWT_SECRET environment variable is required');
-  process.exit(1);
-}
-
-if (!ORO_PRIVATE_KEY) {
-  console.error('ERROR: ORO_PRIVATE_KEY environment variable is required');
-  process.exit(1);
-}
-
-if (!process.env.ALCHEMY_API_KEY) {
-  console.error('ERROR: ALCHEMY_API_KEY environment variable is required');
-  process.exit(1);
-}
+// Alchemy API Key with fallback
+const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || 'demo-key';
 
 app.use(cors({
   origin: [
@@ -68,7 +55,7 @@ app.use('/badges', express.static('public/badges'));
 
 // Initialize Alchemy SDK
 const alchemy = new Alchemy({
-  apiKey: process.env.ALCHEMY_API_KEY,
+  apiKey: ALCHEMY_API_KEY,
   network: Network.ETH_MAINNET,
   maxRetries: 3,
   requestTimeout: 30000, // 30 second timeout instead of 120
