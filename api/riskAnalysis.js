@@ -106,9 +106,9 @@ class RiskAnalyzer {
       riskScore += 30;
     }
     
-    // 2. Check for rapid token movements (potential laundering)
+    // 2. Check for rapid token movements (potential laundering) - MUCH MORE CONSERVATIVE
     const tokenTransfers = transfers.filter(tx => tx.category === 'erc20');
-    if (tokenTransfers.length > 200 && !KNOWN_DEFI_PROTOCOLS.has(address?.toLowerCase())) {
+    if (tokenTransfers.length > 2000 && !KNOWN_DEFI_PROTOCOLS.has(address?.toLowerCase())) {
       riskFactors.push(`High token activity: ${tokenTransfers.length} token transfers`);
       riskScore += 20;
     }
@@ -123,29 +123,29 @@ class RiskAnalyzer {
       riskScore += 50; // High risk
     }
     
-    // 4. Check for bot-like patterns (more sophisticated approach)
-    if (transfers.length >= 20 && !KNOWN_DEFI_PROTOCOLS.has(address?.toLowerCase())) {
-      // Look for patterns that indicate bot behavior
+    // 4. Check for bot-like patterns (MUCH MORE CONSERVATIVE - only flag extreme cases)
+    if (transfers.length >= 100 && !KNOWN_DEFI_PROTOCOLS.has(address?.toLowerCase())) {
+      // Look for patterns that indicate bot behavior - ONLY EXTREME CASES
       let botScore = 0;
       let botReasons = [];
       
-      // Pattern 1: Very high transaction frequency (more than 1 tx per hour average)
-      const recentTransfers = transfers.slice(0, 50); // Last 50 transactions
-      if (recentTransfers.length >= 20) {
+      // Pattern 1: EXTREMELY high transaction frequency (less than 0.1 blocks between txs)
+      const recentTransfers = transfers.slice(0, 100); // Last 100 transactions
+      if (recentTransfers.length >= 50) {
         const timestamps = recentTransfers.map(tx => tx.blockNum).filter(Boolean);
-        if (timestamps.length >= 10) {
+        if (timestamps.length >= 20) {
           const timeSpan = timestamps[0] - timestamps[timestamps.length - 1];
           const avgTimeBetweenTx = timeSpan / timestamps.length;
           
-          // If average time between transactions is less than 1 block (12 seconds), likely a bot
-          if (avgTimeBetweenTx < 0.5) {
+          // Only flag if average time is less than 0.1 blocks (1.2 seconds) - EXTREME
+          if (avgTimeBetweenTx < 0.1) {
             botScore += 15;
             botReasons.push('Extremely high transaction frequency');
           }
         }
       }
       
-      // Pattern 2: Consistent transaction amounts (bot-like)
+      // Pattern 2: EXTREMELY consistent transaction amounts (95%+ same amounts)
       const amounts = recentTransfers.map(tx => {
         try {
           return parseFloat(ethers.formatEther(tx.value || '0'));
@@ -154,18 +154,18 @@ class RiskAnalyzer {
         }
       }).filter(amount => amount > 0);
       
-      if (amounts.length >= 10) {
+      if (amounts.length >= 20) {
         const uniqueAmounts = new Set(amounts.map(a => Math.round(a * 100) / 100)); // Round to 2 decimals
         const consistencyRatio = uniqueAmounts.size / amounts.length;
         
-        // If more than 80% of transactions use the same amounts, likely a bot
-        if (consistencyRatio < 0.2) {
+        // Only flag if more than 95% of transactions use the same amounts - EXTREME
+        if (consistencyRatio < 0.05) {
           botScore += 10;
           botReasons.push('Highly consistent transaction amounts');
         }
       }
       
-      // Pattern 3: Rapid-fire transactions (multiple transactions in same block)
+      // Pattern 3: EXTREME rapid-fire transactions (20+ transactions in same block)
       const blockGroups = {};
       recentTransfers.forEach(tx => {
         if (tx.blockNum) {
@@ -174,13 +174,13 @@ class RiskAnalyzer {
       });
       
       const maxTxPerBlock = Math.max(...Object.values(blockGroups));
-      if (maxTxPerBlock >= 5) {
+      if (maxTxPerBlock >= 20) { // Much higher threshold
         botScore += 20;
         botReasons.push(`Multiple transactions per block (${maxTxPerBlock} max)`);
       }
       
-      // Only flag as bot if multiple patterns are detected
-      if (botScore >= 25) {
+      // Only flag as bot if ALL patterns are detected AND score is very high
+      if (botScore >= 40 && botReasons.length >= 2) {
         riskFactors.push(`Automated/bot-like patterns: ${botReasons.join(', ')}`);
         riskScore += 25;
       }
@@ -305,51 +305,57 @@ class RiskAnalyzer {
     return { riskScore: Math.min(riskScore, 100), riskFactors };
   }
   
-  // Analyze address patterns for suspicious characteristics
+  // Analyze address patterns for suspicious characteristics (MUCH MORE CONSERVATIVE)
   static analyzeAddressPattern(address) {
     const cleanAddr = address.toLowerCase().replace('0x', '');
     let riskScore = 0;
     let reason = '';
     let isSuspicious = false;
     
-    // 1. Check for repeating characters (potential vanity addresses)
-    const repeatingPattern = /(.)\1{3,}/.test(cleanAddr);
-    if (repeatingPattern) {
+    // 1. Check for EXTREME repeating characters (6+ in a row) - only flag obvious patterns
+    const extremeRepeatingPattern = /(.)\1{5,}/.test(cleanAddr);
+    if (extremeRepeatingPattern) {
       riskScore += 20;
-      reason = 'Repeating character pattern detected';
+      reason = 'Extreme repeating character pattern detected';
       isSuspicious = true;
     }
     
-    // 1b. Check for repeating 2-character patterns (like e0e0e0e0)
-    const repeatingTwoChar = /(..)\1{3,}/.test(cleanAddr);
-    if (repeatingTwoChar) {
+    // 2. Check for EXTREME sequential patterns (6+ characters in sequence)
+    const extremeSequentialPattern = /012345|123456|234567|345678|456789|56789a|6789ab|789abc|89abcd|9abcde|abcdef|bcdef0|cdef01|def012|ef0123|f01234/.test(cleanAddr);
+    if (extremeSequentialPattern) {
       riskScore += 25;
-      reason = 'Repeating 2-character pattern detected';
+      reason = 'Extreme sequential character pattern detected';
       isSuspicious = true;
     }
     
-    // 2. Check for sequential patterns (potential test addresses)
-    const sequentialPattern = /0123|1234|2345|3456|4567|5678|6789|789a|89ab|9abc|abcd|bcde|cdef|def0|ef01|f012/.test(cleanAddr);
-    if (sequentialPattern) {
-      riskScore += 25;
-      reason = 'Sequential character pattern detected';
-      isSuspicious = true;
-    }
-    
-    // 3. Check for all zeros or all ones (potential test addresses)
-    if (cleanAddr === '0000000000000000000000000000000000000000' || 
-        cleanAddr === '1111111111111111111111111111111111111111') {
+    // 3. Check for all zeros (potential test addresses) - keep this strict
+    if (cleanAddr === '0000000000000000000000000000000000000000') {
       riskScore += 30;
-      reason = 'All zeros or ones pattern detected';
+      reason = 'All zeros pattern detected';
       isSuspicious = true;
     }
     
-    // 4. Check for common test patterns
+    // 3b. Check for all ones - but be more lenient (vanity addresses are legitimate)
+    if (cleanAddr === '1111111111111111111111111111111111111111') {
+      riskScore += 10; // Lower penalty for vanity addresses
+      reason = 'All ones pattern detected (vanity address)';
+      isSuspicious = true;
+    }
+    
+    // 4. Check for common test patterns - keep this strict
     const testPatterns = ['dead', 'beef', 'cafe', 'babe', 'face'];
     const hasTestPattern = testPatterns.some(pattern => cleanAddr.includes(pattern));
     if (hasTestPattern) {
-      riskScore += 15;
+      riskScore += 25; // Higher penalty for test patterns
       reason = 'Common test pattern detected';
+      isSuspicious = true;
+    }
+    
+    // 5. Check for EXTREME repeating 2-character patterns (5+ repetitions)
+    const extremeRepeatingTwoChar = /(..)\1{4,}/.test(cleanAddr);
+    if (extremeRepeatingTwoChar) {
+      riskScore += 25;
+      reason = 'Extreme repeating 2-character pattern detected';
       isSuspicious = true;
     }
     
