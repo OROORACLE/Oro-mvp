@@ -13,6 +13,22 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '30d'; // 30 days default
 const ORO_PRIVATE_KEY = process.env.ORO_PRIVATE_KEY;
 
+// Check required environment variables
+if (!JWT_SECRET) {
+  console.error('ERROR: JWT_SECRET environment variable is required');
+  process.exit(1);
+}
+
+if (!ORO_PRIVATE_KEY) {
+  console.error('ERROR: ORO_PRIVATE_KEY environment variable is required');
+  process.exit(1);
+}
+
+if (!process.env.ALCHEMY_API_KEY) {
+  console.error('ERROR: ALCHEMY_API_KEY environment variable is required');
+  process.exit(1);
+}
+
 app.use(cors({
   origin: [
     'https://web-eqaphg4cx-loganstafford740-1721s-projects.vercel.app',
