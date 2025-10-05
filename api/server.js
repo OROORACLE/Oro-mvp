@@ -9,9 +9,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // JWT Configuration
-const JWT_SECRET = process.env.JWT_SECRET || 'oro-reputation-oracle-secret-key-2025';
+const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '30d'; // 30 days default
-const ORO_PRIVATE_KEY = process.env.ORO_PRIVATE_KEY || crypto.randomBytes(32).toString('hex');
+const ORO_PRIVATE_KEY = process.env.ORO_PRIVATE_KEY;
 
 app.use(cors({
   origin: [
@@ -49,7 +49,7 @@ app.use('/badges', express.static('public/badges'));
 
 // Initialize Alchemy SDK
 const alchemy = new Alchemy({
-  apiKey: process.env.ALCHEMY_API_KEY || 'eqHZ7IU0G8noXjF-OLo6U', // Real Alchemy key
+  apiKey: process.env.ALCHEMY_API_KEY,
   network: Network.ETH_MAINNET,
   maxRetries: 3,
   requestTimeout: 30000, // 30 second timeout instead of 120

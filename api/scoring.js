@@ -6,7 +6,7 @@ const { DeFiAnalyzer } = require('./defiProtocols');
 
 // Initialize Alchemy
 const alchemy = new Alchemy({
-  apiKey: process.env.ALCHEMY_API_KEY || 'eqHZ7IU0G8noXjF-OLo6U',
+  apiKey: process.env.ALCHEMY_API_KEY,
   network: Network.ETH_MAINNET,
   maxRetries: 3,
   requestTimeout: 30000
