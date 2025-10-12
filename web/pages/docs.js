@@ -98,7 +98,7 @@ export default function Docs() {
               <li><a href="#use-cases" style={{ color: '#667eea', textDecoration: 'none' }}>Use Cases</a></li>
               <li><a href="#api-reference" style={{ color: '#667eea', textDecoration: 'none' }}>API Reference</a></li>
               <li><a href="#integration" style={{ color: '#667eea', textDecoration: 'none' }}>Integration Guide</a></li>
-              <li><a href="#contract" style={{ color: '#667eea', textDecoration: 'none' }}>Smart Contract</a></li>
+              <li><a href="#risk-analysis" style={{ color: '#667eea', textDecoration: 'none' }}>Risk Analysis</a></li>
             </ul>
           </div>
 
@@ -155,10 +155,10 @@ export default function Docs() {
                 borderRadius: '10px',
                 border: '1px solid #e9ecef'
               }}>
-                <h3 style={{ color: '#333', marginBottom: '10px' }}>3. Badge Minting</h3>
+                <h3 style={{ color: '#333', marginBottom: '10px' }}>3. Real-time Scoring</h3>
                 <p style={{ color: '#666', lineHeight: '1.6' }}>
-                  Users can mint soulbound reputation badges that update in real-time 
-                  and are non-transferable, ensuring authenticity.
+                  Our API provides instant reputation scores and risk analysis that 
+                  protocols can integrate directly into their applications.
                 </p>
               </div>
             </div>
@@ -330,17 +330,17 @@ export default function Docs() {
                 </thead>
                 <tbody>
                   <tr style={{ borderBottom: '1px solid #e9ecef' }}>
-                    <td style={{ padding: '15px', fontWeight: 'bold', color: '#333' }}>80-100</td>
+                    <td style={{ padding: '15px', fontWeight: 'bold', color: '#333' }}>75-100</td>
                     <td style={{ padding: '15px', color: '#28a745' }}>Trusted</td>
                     <td style={{ padding: '15px', color: '#666' }}>Highest reputation tier with excellent onchain behavior</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #e9ecef' }}>
-                    <td style={{ padding: '15px', fontWeight: 'bold', color: '#333' }}>50-79</td>
+                    <td style={{ padding: '15px', fontWeight: 'bold', color: '#333' }}>35-74</td>
                     <td style={{ padding: '15px', color: '#ffc107' }}>Stable</td>
                     <td style={{ padding: '15px', color: '#666' }}>Standard reputation tier with reliable behavior</td>
                   </tr>
                   <tr>
-                    <td style={{ padding: '15px', fontWeight: 'bold', color: '#333' }}>0-49</td>
+                    <td style={{ padding: '15px', fontWeight: 'bold', color: '#333' }}>0-34</td>
                     <td style={{ padding: '15px', color: '#dc3545' }}>New/Unproven</td>
                     <td style={{ padding: '15px', color: '#666' }}>Basic reputation tier for new or unproven wallets</td>
                   </tr>
@@ -415,7 +415,7 @@ export default function Docs() {
                 borderRadius: '5px',
                 color: '#333'
               }}>
-                https://orooracle-jy1luige9-loganstafford740-1721s-projects.vercel.app
+                https://oro-api-private.onrender.com
               </code>
             </div>
 
@@ -447,7 +447,7 @@ export default function Docs() {
               borderRadius: '10px',
               marginBottom: '20px'
             }}>
-              <h4 style={{ color: '#333', marginBottom: '10px' }}>Get Badge Metadata</h4>
+              <h4 style={{ color: '#333', marginBottom: '10px' }}>Get Health Status</h4>
               <code style={{
                 background: '#e9ecef',
                 padding: '5px 10px',
@@ -456,10 +456,10 @@ export default function Docs() {
                 display: 'block',
                 marginBottom: '10px'
               }}>
-                GET /metadata/:address.json
+                GET /health
               </code>
               <p style={{ color: '#666', fontSize: '14px' }}>
-                Returns ERC-721 compatible metadata for the reputation badge.
+                Returns API health status and performance metrics.
               </p>
             </div>
           </section>
@@ -486,7 +486,7 @@ export default function Docs() {
                 overflow: 'auto',
                 fontSize: '14px'
               }}>
-{`const API_BASE = 'https://orooracle-jy1luige9-loganstafford740-1721s-projects.vercel.app';
+{`const API_BASE = 'https://oro-api-private.onrender.com';
 
 async function getWalletScore(address) {
   const response = await fetch(\`\${API_BASE}/score/\${address}\`);
@@ -500,11 +500,11 @@ console.log(\`Score: \${score.score}, Status: \${score.status}\`);`}
             </div>
           </section>
 
-          {/* Smart Contract */}
-          <section id="contract" style={{ marginBottom: '40px' }}>
-            <h2 style={{ color: '#333', marginBottom: '20px' }}>Smart Contract</h2>
+          {/* Risk Analysis */}
+          <section id="risk-analysis" style={{ marginBottom: '40px' }}>
+            <h2 style={{ color: '#333', marginBottom: '20px' }}>Risk Analysis</h2>
             <p style={{ color: '#666', lineHeight: '1.6', marginBottom: '20px' }}>
-              ORO uses a soulbound ERC-721 contract for reputation badges:
+              ORO provides comprehensive risk analysis alongside reputation scoring:
             </p>
             
             <div style={{
@@ -513,12 +513,13 @@ console.log(\`Score: \${score.score}, Status: \${score.status}\`);`}
               borderRadius: '10px',
               marginBottom: '20px'
             }}>
-              <h4 style={{ color: '#333', marginBottom: '10px' }}>Contract Details</h4>
+              <h4 style={{ color: '#333', marginBottom: '10px' }}>Risk Factors</h4>
               <ul style={{ color: '#666', lineHeight: '1.6', marginLeft: '20px' }}>
-                <li><strong>Network:</strong> Sepolia Testnet</li>
-                <li><strong>Address:</strong> <code>0x7fd112d62e3D32bD3667c878dfAf582B18d4266b</code></li>
-                <li><strong>Type:</strong> Soulbound ERC-721 (Non-transferable)</li>
-                <li><strong>Features:</strong> One badge per wallet, real-time updates</li>
+                <li><strong>OFAC Sanctions:</strong> Checks against sanctioned addresses</li>
+                <li><strong>Privacy Mixers:</strong> Identifies mixer contract interactions</li>
+                <li><strong>DeFi Abuse:</strong> Detects suspicious DeFi patterns</li>
+                <li><strong>Transaction Patterns:</strong> Analyzes unusual behavior</li>
+                <li><strong>Address Patterns:</strong> Identifies bot/automation signatures</li>
               </ul>
             </div>
           </section>
