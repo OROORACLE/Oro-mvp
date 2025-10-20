@@ -1,7 +1,6 @@
 {
-  "name": "oro-mvp",
+  "name": "oro-web",
   "version": "0.1.0",
-  "description": "ORO — Onchain Reputation Oracle for Web3",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -24,22 +23,5 @@
     "eslint-config-next": "14.0.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17"
-  },
-  "keywords": [
-    "web3",
-    "reputation",
-    "oracle",
-    "defi",
-    "soulbound",
-    "nft"
-  ],
-  "author": "OROORACLE",
-  "license": "MIT",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/orooracle/oro-mvp.git"
   }
 }

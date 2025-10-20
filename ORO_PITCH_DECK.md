@@ -192,3 +192,6 @@ Total Score = (Activity × 40%) + (DeFi Usage × 25%) +
 - **Uptime:** 99.9% SLA
 - **Rate limits:** 1000 requests/minute
 - **Data freshness:** Real-time (latest block)
+
+
+
